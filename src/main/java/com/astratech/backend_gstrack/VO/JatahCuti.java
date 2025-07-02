@@ -29,7 +29,7 @@ public class JatahCuti {
     public JatahCuti() {
     }
 
-    public JatahCuti(Long id, String userId, int tahun, int hakCuti, int cutiDipakai, int cutiSisa) {
+    public JatahCuti(String id, String userId, int tahun, int hakCuti, int cutiDipakai, int cutiSisa) {
         this.id = id;
         this.userId = userId;
         this.tahun = tahun;
@@ -38,11 +38,11 @@ public class JatahCuti {
         this.cutiSisa = cutiSisa;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
