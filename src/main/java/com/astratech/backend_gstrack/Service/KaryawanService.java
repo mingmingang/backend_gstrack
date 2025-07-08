@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-
+//Karyawan Service
 @Service
 public class KaryawanService {
 
