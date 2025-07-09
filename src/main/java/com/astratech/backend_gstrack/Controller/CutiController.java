@@ -5,9 +5,19 @@ import com.astratech.backend_gstrack.VO.Cuti;
 import com.astratech.backend_gstrack.VO.Result;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class CutiController {
@@ -25,24 +35,23 @@ public class CutiController {
         return cutiService.getCutiById(cutiId);
     }
 
-    @GetMapping("/cuti/user")
-    public List<Cuti> getCutiByUser(
-            @RequestParam("userId") String userId,
+    @GetMapping("/cuti/karyawan")
+    public List<Cuti> getCutiByNpk(
+            @RequestParam("npk") String npk,
             @RequestParam(value = "jenis", required = false) String jenisCuti,
             @RequestParam(value = "status", required = false) String status
     ) {
         if (jenisCuti != null && !jenisCuti.isEmpty() &&
                 status != null && !status.isEmpty()) {
-            return cutiService.getCutiByUserAndJenisAndStatus(userId, jenisCuti, status);
+            return cutiService.getCutiByNpkAndJenisAndStatus(npk, jenisCuti, status);
         } else if (jenisCuti != null && !jenisCuti.isEmpty()) {
-            return cutiService.getCutiByUserAndJenis(userId, jenisCuti);
+            return cutiService.getCutiByNpkAndJenis(npk, jenisCuti);
         } else if (status != null && !status.isEmpty()) {
-            return cutiService.getCutiByUserAndStatus(userId, status);
+            return cutiService.getCutiByNpkAndStatus(npk, status);
         } else {
-            return cutiService.getCutiByUser(userId);
+            return cutiService.getCutiByNpk(npk);
         }
     }
-
 
     @PostMapping("/cuti")
     public Object saveCuti(HttpServletResponse response, @RequestBody Cuti cuti) {
@@ -76,4 +85,47 @@ public class CutiController {
             return new Result(500, "Gagal menghapus cuti");
         }
     }
+
+    @PostMapping("/cuti/upload-lampiran")
+    public ResponseEntity<String> uploadLampiran(@RequestParam("file") MultipartFile file) {
+        try {
+            String rootPath = System.getProperty("user.dir");
+            String folderPath = rootPath + File.separator + "uploads" + File.separator + "lampiran";
+
+            File directory = new File(folderPath);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            File dest = new File(directory, fileName);
+
+            file.transferTo(dest);
+            return ResponseEntity.ok(fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Gagal upload file: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/cuti/lampiran/{filename:.+}")
+    public ResponseEntity<org.springframework.core.io.Resource> getLampiran(@PathVariable String filename) {
+        try {
+            Path filePath = Paths.get("uploads/lampiran").resolve(filename).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (!resource.exists()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
 }
