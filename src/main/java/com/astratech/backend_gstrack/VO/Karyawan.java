@@ -71,6 +71,10 @@ public class Karyawan {
         this.password = password;
     }
 
+    public Karyawan(String kryNpk) {
+        this.npk = kryNpk;
+    }
+
     public String getNpk() {
         return npk;
     }

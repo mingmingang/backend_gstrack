@@ -8,7 +8,7 @@ import java.sql.Date;
 public class Cuti {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cuti_id")
     private String cutiId;
 
