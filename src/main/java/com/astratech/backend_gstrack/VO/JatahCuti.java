@@ -3,55 +3,63 @@ package com.astratech.backend_gstrack.VO;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "cuti_jatah")
+@Table(name = "gs_track_cuti_jatah")
 public class JatahCuti {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
-    private String id;
+    private Integer id;
 
-    @Column(name = "user_id")
-    private String userId;
+    @Column(name = "kry_npk", nullable = false)
+    private String kryNpk;
 
-    @Column(name = "tahun")
+    @Column(name = "tahun", nullable = false)
     private int tahun;
 
-    @Column(name = "hak_cuti")
+    @Column(name = "hak_cuti", nullable = false)
     private int hakCuti;
 
-    @Column(name = "cuti_dipakai")
+    @Column(name = "cuti_dipakai", nullable = false)
     private int cutiDipakai;
 
-    @Column(name = "cuti_sisa")
+    @Column(name = "cuti_sisa", nullable = false)
     private int cutiSisa;
+
+    @Column(name = "tipe_cuti")
+    private String tipeCuti;
+
+    @Column(name = "masa_berlaku")
+    private String masaBerlaku;
 
     public JatahCuti() {
     }
 
-    public JatahCuti(String id, String userId, int tahun, int hakCuti, int cutiDipakai, int cutiSisa) {
+    public JatahCuti(Integer id, String kryNpk, int tahun, int hakCuti, int cutiDipakai, int cutiSisa, String tipeCuti, String masaBerlaku) {
         this.id = id;
-        this.userId = userId;
+        this.kryNpk = kryNpk;
         this.tahun = tahun;
         this.hakCuti = hakCuti;
         this.cutiDipakai = cutiDipakai;
         this.cutiSisa = cutiSisa;
+        this.tipeCuti = tipeCuti;
+        this.masaBerlaku = masaBerlaku;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getKryNpk() {
+        return kryNpk;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setKryNpk(String kryNpk) {
+        this.kryNpk = kryNpk;
     }
 
     public int getTahun() {
@@ -84,5 +92,21 @@ public class JatahCuti {
 
     public void setCutiSisa(int cutiSisa) {
         this.cutiSisa = cutiSisa;
+    }
+
+    public String getTipeCuti() {
+        return tipeCuti;
+    }
+
+    public void setTipeCuti(String tipeCuti) {
+        this.tipeCuti = tipeCuti;
+    }
+
+    public String getMasaBerlaku() {
+        return masaBerlaku;
+    }
+
+    public void setMasaBerlaku(String masaBerlaku) {
+        this.masaBerlaku = masaBerlaku;
     }
 }

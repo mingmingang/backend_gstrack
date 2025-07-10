@@ -14,10 +14,13 @@ public interface CutiRepository extends JpaRepository<Cuti, Serializable> {
 
     List<Cuti> findAllByOrderByTanggalPengajuanDesc();
 
-    List<Cuti> findByUserIdOrderByTanggalPengajuanDesc(String userId);
+    List<Cuti> findByNpkOrderByTanggalPengajuanDesc(String npk);
 
-    List<Cuti> findByUserIdAndJenisCutiAndStatus(String userId, String jenisCuti, String status);
-    List<Cuti> findByUserIdAndJenisCuti(String userId, String jenisCuti);
-    List<Cuti> findByUserIdAndStatus(String userId, String status);
-    List<Cuti> findByUserId(String userId);
+    List<Cuti> findByNpkAndTipeCutiAndStatus(String npk, String tipeCuti, String status);
+
+    List<Cuti> findByNpkAndTipeCuti(String npk, String tipeCuti);
+
+    List<Cuti> findByNpkAndStatus(String npk, String status);
+
+    List<Cuti> findByNpk(String npk);
 }

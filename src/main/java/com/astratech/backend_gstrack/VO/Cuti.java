@@ -4,47 +4,74 @@ import jakarta.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name = "cuti")
+@Table(name = "gs_track_cuti")
 public class Cuti {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cuti_id")
     private String cutiId;
 
-    @Column(name = "user_id")
-    private String userId;
-
-    @Column(name = "mulai_dari")
-    private Date tanggalAwal;
-
-    @Column(name = "sampai_dengan")
-    private Date tanggalAkhir;
+    @Column(name = "kry_npk")
+    private String npk;
 
     @Column(name = "tipe_cuti")
-    private String jenisCuti;
+    private String tipeCuti;
 
-    @Column(name = "alasan")
-    private String alasan;
+    @Column(name = "sub_tipe_cuti")
+    private String subTipeCuti;
+
+    @Column(name = "mulai_dari")
+    private Date mulaiDari;
+
+    @Column(name = "sampai_dengan")
+    private Date sampaiDengan;
+
+    @Column(name = "durasi")
+    private Integer durasi;
 
     @Column(name = "status")
     private String status;
 
+    @Column(name = "alasan")
+    private String alasan;
+
+    @Column(name = "lampiran")
+    private String lampiran;
+
     @Column(name = "tanggal_pengajuan")
     private Date tanggalPengajuan;
+
+    @Column(name = "masa_berlaku_cuti")
+    private Date masaBerlakuCuti;
+
+    @Column(name = "jenis_cuti")
+    private String jenisCuti;
+
+    @Column(name = "tanggal_akhir")
+    private Date tanggalAkhir;
+
+    @Column(name = "tanggal_awal")
+    private Date tanggalAwal;
 
     public Cuti() {
     }
 
-    public Cuti(String cutiId, String userId, Date tanggalAwal, Date tanggalAkhir, String jenisCuti, String alasan, String status, Date tanggalPengajuan) {
+    public Cuti(String cutiId, String npk, String tipeCuti, String subTipeCuti, Date mulaiDari, Date sampaiDengan, Integer durasi, String status, String alasan, String lampiran, Date tanggalPengajuan, Date masaBerlakuCuti, String jenisCuti, Date tanggalAkhir, Date tanggalAwal) {
         this.cutiId = cutiId;
-        this.userId = userId;
-        this.tanggalAwal = tanggalAwal;
-        this.tanggalAkhir = tanggalAkhir;
-        this.jenisCuti = jenisCuti;
-        this.alasan = alasan;
+        this.npk = npk;
+        this.tipeCuti = tipeCuti;
+        this.subTipeCuti = subTipeCuti;
+        this.mulaiDari = mulaiDari;
+        this.sampaiDengan = sampaiDengan;
+        this.durasi = durasi;
         this.status = status;
+        this.alasan = alasan;
+        this.lampiran = lampiran;
         this.tanggalPengajuan = tanggalPengajuan;
+        this.masaBerlakuCuti = masaBerlakuCuti;
+        this.jenisCuti = jenisCuti;
+        this.tanggalAkhir = tanggalAkhir;
+        this.tanggalAwal = tanggalAwal;
     }
 
     public String getCutiId() {
@@ -55,44 +82,52 @@ public class Cuti {
         this.cutiId = cutiId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getNpk() {
+        return npk;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setNpk(String npk) {
+        this.npk = npk;
     }
 
-    public Date getTanggalAwal() {
-        return tanggalAwal;
+    public String getTipeCuti() {
+        return tipeCuti;
     }
 
-    public void setTanggalAwal(Date tanggalAwal) {
-        this.tanggalAwal = tanggalAwal;
+    public void setTipeCuti(String tipeCuti) {
+        this.tipeCuti = tipeCuti;
     }
 
-    public Date getTanggalAkhir() {
-        return tanggalAkhir;
+    public String getSubTipeCuti() {
+        return subTipeCuti;
     }
 
-    public void setTanggalAkhir(Date tanggalAkhir) {
-        this.tanggalAkhir = tanggalAkhir;
+    public void setSubTipeCuti(String subTipeCuti) {
+        this.subTipeCuti = subTipeCuti;
     }
 
-    public String getJenisCuti() {
-        return jenisCuti;
+    public Date getMulaiDari() {
+        return mulaiDari;
     }
 
-    public void setJenisCuti(String jenisCuti) {
-        this.jenisCuti = jenisCuti;
+    public void setMulaiDari(Date mulaiDari) {
+        this.mulaiDari = mulaiDari;
     }
 
-    public String getAlasan() {
-        return alasan;
+    public Date getSampaiDengan() {
+        return sampaiDengan;
     }
 
-    public void setAlasan(String alasan) {
-        this.alasan = alasan;
+    public void setSampaiDengan(Date sampaiDengan) {
+        this.sampaiDengan = sampaiDengan;
+    }
+
+    public Integer getDurasi() {
+        return durasi;
+    }
+
+    public void setDurasi(Integer durasi) {
+        this.durasi = durasi;
     }
 
     public String getStatus() {
@@ -103,11 +138,59 @@ public class Cuti {
         this.status = status;
     }
 
+    public String getAlasan() {
+        return alasan;
+    }
+
+    public void setAlasan(String alasan) {
+        this.alasan = alasan;
+    }
+
+    public String getLampiran() {
+        return lampiran;
+    }
+
+    public void setLampiran(String lampiran) {
+        this.lampiran = lampiran;
+    }
+
     public Date getTanggalPengajuan() {
         return tanggalPengajuan;
     }
 
     public void setTanggalPengajuan(Date tanggalPengajuan) {
         this.tanggalPengajuan = tanggalPengajuan;
+    }
+
+    public Date getMasaBerlakuCuti() {
+        return masaBerlakuCuti;
+    }
+
+    public void setMasaBerlakuCuti(Date masaBerlakuCuti) {
+        this.masaBerlakuCuti = masaBerlakuCuti;
+    }
+
+    public String getJenisCuti() {
+        return jenisCuti;
+    }
+
+    public void setJenisCuti(String jenisCuti) {
+        this.jenisCuti = jenisCuti;
+    }
+
+    public Date getTanggalAkhir() {
+        return tanggalAkhir;
+    }
+
+    public void setTanggalAkhir(Date tanggalAkhir) {
+        this.tanggalAkhir = tanggalAkhir;
+    }
+
+    public Date getTanggalAwal() {
+        return tanggalAwal;
+    }
+
+    public void setTanggalAwal(Date tanggalAwal) {
+        this.tanggalAwal = tanggalAwal;
     }
 }

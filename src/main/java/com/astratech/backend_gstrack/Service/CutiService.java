@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -25,8 +24,8 @@ public class CutiService {
         return cutiRepository.findAll();
     }
 
-    public List<Cuti> getCutiByUser(String userId) {
-        return cutiRepository.findByUserIdOrderByTanggalPengajuanDesc(userId);
+    public List<Cuti> getCutiByNpk(String npk) {
+        return cutiRepository.findByNpkOrderByTanggalPengajuanDesc(npk);
     }
 
     public boolean saveCuti(Cuti cuti) {
@@ -68,7 +67,7 @@ public class CutiService {
         return true;
     }
 
-    public boolean deleteCuti(String  cutiId) {
+    public boolean deleteCuti(String cutiId) {
         Cuti existingCuti = cutiRepository.findByCutiId(cutiId);
         if (existingCuti == null) {
             return false;
@@ -77,17 +76,15 @@ public class CutiService {
         return true;
     }
 
-    public List<Cuti> getCutiByUserAndJenis(String userId, String jenisCuti) {
-        return cutiRepository.findByUserIdAndJenisCuti(userId, jenisCuti);
+    public List<Cuti> getCutiByNpkAndJenis(String npk, String tipeCuti) {
+        return cutiRepository.findByNpkAndTipeCuti(npk, tipeCuti);
     }
 
-    public List<Cuti> getCutiByUserAndStatus(String userId, String status) {
-        return cutiRepository.findByUserIdAndStatus(userId, status);
+    public List<Cuti> getCutiByNpkAndStatus(String npk, String status) {
+        return cutiRepository.findByNpkAndStatus(npk, status);
     }
 
-    public List<Cuti> getCutiByUserAndJenisAndStatus(String userId, String jenisCuti, String status) {
-        return cutiRepository.findByUserIdAndJenisCutiAndStatus(userId, jenisCuti, status);
+    public List<Cuti> getCutiByNpkAndJenisAndStatus(String npk, String tipeCuti, String status) {
+        return cutiRepository.findByNpkAndTipeCutiAndStatus(npk, tipeCuti, status);
     }
-
-
 }
