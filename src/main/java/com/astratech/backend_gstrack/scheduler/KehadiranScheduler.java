@@ -19,16 +19,16 @@ public class KehadiranScheduler {
     KehadiranRepository kehadiranRepository;
     @Autowired
     KaryawanRepository karyawanRepository;
-    @Scheduled(cron = "0 * * * * *", zone = "Asia/Jakarta") // jalan tiap menit, real jam 9 doang juga bisa
+    @Scheduled(cron = "0 0 22 * * *", zone = "Asia/Jakarta")
     public void validateKehadiran() {
         System.out.println("⏰ Scheduler running...");
 
-        // ➕ Tambahin cek jam > 9
+        // ➕ Tambahin cek jam > 22.00
         if (LocalTime.now().isAfter(LocalTime.of(9, 0))) {
 
             Date today = Date.valueOf(LocalDate.now());
             List<Karyawan> karyawanList = karyawanRepository.findAll();
-            List<String> npkListPresent = kehadiranRepository.FilterNpk(today); // YANG INI DIPAKE!
+            List<String> npkListPresent = kehadiranRepository.FilterNpk(today);
 
             for (Karyawan k : karyawanList) {
                 if (!npkListPresent.contains(k.getNpk())) {
@@ -43,12 +43,5 @@ public class KehadiranScheduler {
             }
         }
     }
-
-
-//    @Scheduled(initialDelay = 5000, fixedRate = 10000)
-//    public void testScheduled()
-//    {
-//        System.out.println("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-//    }
 
 }
