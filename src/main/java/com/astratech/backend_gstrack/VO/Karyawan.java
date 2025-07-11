@@ -55,9 +55,15 @@ public class Karyawan {
     @Column(name = "kry_jabatan")
     private String jabatan;
 
+    @Column(name = "kry_status_kawin")
+    private String statusKawin;
+
+    @Column(name = "kry_golongan")
+    private String golongan;
+
     public Karyawan() {}
 
-    public Karyawan(String npk, String namaKaryawan, String fotoKaryawan, String plant, String departemen, String email, String noHandphone, Date tanggalLahir, String status, String createdBy, LocalDateTime createdDate, String modifBy, LocalDateTime modifDate, String password, String jabatan) {
+    public Karyawan(String npk, String namaKaryawan, String fotoKaryawan, String plant, String departemen, String email, String noHandphone, Date tanggalLahir, String status, String createdBy, LocalDateTime createdDate, String modifBy, LocalDateTime modifDate, String password, String jabatan,  String statusKawin,  String golongan) {
         this.npk = npk;
         this.namaKaryawan = namaKaryawan;
         this.fotoKaryawan = fotoKaryawan;
@@ -73,6 +79,8 @@ public class Karyawan {
         this.modifDate = modifDate;
         this.password = password;
         this.jabatan = jabatan;
+        this.statusKawin = statusKawin;
+        this.golongan = golongan;
     }
 
     public Karyawan(String kryNpk) {
@@ -197,5 +205,21 @@ public class Karyawan {
 
     public void setJabatan(String jabatan) {
         this.jabatan = jabatan;
+    }
+
+    public String getStatusKawin() {
+        return statusKawin;
+    }
+
+    public void setStatusKawin(String statusKawin) {
+        this.statusKawin = statusKawin;
+    }
+
+    public String getGolongan() {
+        return golongan;
+    }
+
+    public void setGolongan(String golongan) {
+        this.golongan = golongan;
     }
 }

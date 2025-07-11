@@ -29,6 +29,17 @@ public interface ReimbursementRepository extends JpaRepository<Reimbursement, Bi
             "ORDER BY r.rbmCreatedDate DESC")
     List<Reimbursement> findReimbursementsByNpkAndYear(@Param("npk") String npk, @Param("year") int year);
 
+    @Query("SELECT r FROM Reimbursement r " +
+            "LEFT JOIN FETCH r.karyawan k " +
+            "LEFT JOIN FETCH r.keluarga kl " +
+            "LEFT JOIN FETCH kl.orang o " +
+            "WHERE YEAR(r.rbmCreatedDate) = :year " +
+            "ORDER BY r.rbmCreatedDate DESC")
+    List<Reimbursement> findReimbursementsByYear(@Param("year") int year);
+
+    @Query("SELECT MIN(YEAR(r.rbmCreatedDate)) FROM Reimbursement r")
+    Integer findEarliestYear();
+
     /**
      * Mencari ID maksimum (rbm_id) dalam rentang ID untuk bulan tertentu.
      * Contoh: Untuk Juli 2025 (2507), rentangnya adalah 250700 sampai 250799.
