@@ -1,5 +1,6 @@
 package com.astratech.backend_gstrack.Controller;
 
+import com.astratech.backend_gstrack.DTO.ApprovalReimbursementDto;
 import com.astratech.backend_gstrack.DTO.PembatalanReimbursementDto;
 import com.astratech.backend_gstrack.DTO.ReimbursementDto;
 import com.astratech.backend_gstrack.Exception.NotFoundException;
@@ -221,6 +222,45 @@ public class ReimbursementController {
         } catch (Exception e) {
             // Menangani berbagai jenis exception, misalnya NotFoundException
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // ======== ENDPOINT BARU UNTUK UPDATE STATUS PERSETUJUAN ========
+    /**
+     * Endpoint untuk menyetujui atau menolak pengajuan reimbursement.
+     * Menerima request POST dengan body JSON.
+     * Contoh Body: { "rbmId": 24052101, "newStatus": "Setujui", "modifiedByNpk": "NPK_Approver" }
+     * URL: POST /reimbursement/update/status
+     */
+    @PutMapping("/update/status")
+    public ResponseEntity<?> updateReimbursementStatus(@RequestBody ApprovalReimbursementDto request) {
+        try {
+            // Validasi input sederhana
+            if (request.getRbmId() == null || request.getNewStatus() == null || request.getModifiedByNpk() == null) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("message", "Request body is missing required fields (rbmId, newStatus, modifiedByNpk)."));
+            }
+
+            // Panggil service yang sudah dibuat
+            ReimbursementDto updatedDto = reimbursementService.updateReimbursementStatus(
+                    request.getRbmId(),
+                    request.getNewStatus(),
+                    request.getModifiedByNpk()
+            );
+            return ResponseEntity.ok(updatedDto);
+
+        } catch (NotFoundException e) {
+            // Jika reimbursement tidak ditemukan
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", e.getMessage()));
+        } catch (java.lang.IllegalArgumentException e) {
+            // Jika nilai status tidak valid (contoh: bukan 'Setujui' atau 'Ditolak')
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
+        } catch (Exception e) {
+            e.printStackTrace(); // Penting untuk debugging
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "An unexpected error occurred: " + e.getMessage()));
         }
     }
 }

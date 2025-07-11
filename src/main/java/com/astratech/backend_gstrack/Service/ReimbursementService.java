@@ -55,7 +55,7 @@ public class ReimbursementService {
         Reimbursement newReimbursement = new Reimbursement();
 
         // 1. Set ID menggunakan generator baru (PERBAIKAN 1 & 3)
-        newReimbursement.setRbmId(generateReimbursementId());
+        newReimbursement.setRbmId(generateReimbursementId(kryNpk));
 
         // Set semua data teks dan numerik lainnya
         newReimbursement.setKryNpk(kryNpk);
@@ -95,30 +95,26 @@ public class ReimbursementService {
      * yy = tahun, MM = bulan, dd = tanggal, SS = urutan (01-99)
      * Contoh: 24052101 (pengajuan pertama pada 21 Mei 2024)
      */
-    private BigInteger generateReimbursementId() {
-        // 1. Dapatkan prefix tanggal hari ini (yyMMdd)
+    private BigInteger generateReimbursementId(String kryNpk) {
+        // Format: {kryNpk}{yyMMdd}{seq}
         LocalDate today = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-        String datePrefix = today.format(formatter); // Contoh: "240521"
+        String datePrefix = today.format(formatter); // Contoh: "250711"
 
-        // 2. Tentukan rentang ID untuk hari ini untuk query ke database
-        BigInteger startRange = new BigInteger(datePrefix + "01"); // 24052101
-        BigInteger endRange = new BigInteger(datePrefix + "99");   // 24052199
+        // Range berbasis prefix NPK + tanggal
+        String basePrefix = kryNpk + datePrefix; // Contoh: "123456250711"
+        BigInteger startRange = new BigInteger(basePrefix + "01");
+        BigInteger endRange = new BigInteger(basePrefix + "99");
 
-        // 3. Hitung berapa banyak entri yang sudah ada hari ini
-        long countForToday = reimbursementRepository.countByIdInRange(startRange, endRange);
+        // Hitung entri yang sudah ada untuk hari ini dan NPK ini
+        long count = reimbursementRepository.countByIdInRange(startRange, endRange);
+        long sequence = count + 1;
 
-        // 4. Tentukan nomor urut berikutnya
-        long sequence = countForToday + 1;
-
-        // 5. Cek jika urutan melebihi 99 (opsional, tapi best practice)
         if (sequence > 99) {
-            throw new IllegalStateException("Batas maksimal pengajuan harian (99) telah tercapai.");
+            throw new IllegalStateException("Batas maksimal pengajuan harian oleh karyawan telah tercapai (99).");
         }
 
-        // 6. Gabungkan prefix tanggal dengan nomor urut
-        String newIdString = datePrefix + String.format("%02d", sequence); // Format urutan menjadi 2 digit, e.g., 1 -> "01"
-
+        String newIdString = basePrefix + String.format("%02d", sequence);
         return new BigInteger(newIdString);
     }
 
@@ -186,7 +182,6 @@ public class ReimbursementService {
     }
 
     // ============== FUNGSI UNTUK PEMBATALAN (UPDATE) ==============
-    //                       --- METODE BARU ---
     @Transactional
     public ReimbursementDto cancelReimbursement(BigInteger rbmId, ReimbursementDto request) {
         // 1. Cari reimbursement berdasarkan ID
@@ -203,6 +198,36 @@ public class ReimbursementService {
         Reimbursement updatedReimbursement = reimbursementRepository.save(reimbursementToCancel);
 
         // 4. Kembalikan hasil yang sudah diupdate dalam bentuk DTO
+        return convertToDto(updatedReimbursement);
+    }
+
+    // ============== FUNGSI UNTUK UPDATE STATUS PERSETUJUAN (METODE BARU) ==============
+    @Transactional
+    public ReimbursementDto updateReimbursementStatus(BigInteger rbmId, String newStatus, String modifiedByNpk) {
+        // 1. Cari reimbursement berdasarkan ID
+        Reimbursement reimbursementToUpdate = reimbursementRepository.findById(rbmId)
+                .orElseThrow(() -> new NotFoundException("Reimbursement with ID " + rbmId + " not found. Cannot update status."));
+
+        // 2. Tentukan status baru berdasarkan input dari frontend
+        String finalStatus;
+        if ("Setujui".equalsIgnoreCase(newStatus)) {
+            finalStatus = "Belum Diverifikasi";
+        } else if ("Ditolak".equalsIgnoreCase(newStatus)) {
+            finalStatus = "Ditolak";
+        } else {
+            // Jika status yang dikirim tidak valid, lemparkan exception agar tidak ada data aneh yang masuk
+            throw new IllegalArgumentException("Invalid status update value: " + newStatus);
+        }
+
+        // 3. Update field yang relevan
+        reimbursementToUpdate.setRbmStatusSubmit(finalStatus);
+        reimbursementToUpdate.setRbmModifyBy(modifiedByNpk); // NPK user yang melakukan approval/rejection
+        reimbursementToUpdate.setRbmModifyDate(new Date());
+
+        // 4. Simpan perubahan ke database
+        Reimbursement updatedReimbursement = reimbursementRepository.save(reimbursementToUpdate);
+
+        // 5. Kembalikan data yang sudah di-update dalam bentuk DTO
         return convertToDto(updatedReimbursement);
     }
 }
