@@ -52,9 +52,12 @@ public class Karyawan {
     @Column(name = "kry_password")
     private String password;
 
+    @Column(name = "kry_jabatan")
+    private String jabatan;
+
     public Karyawan() {}
 
-    public Karyawan(String npk, String namaKaryawan, String fotoKaryawan, String plant, String departemen, String email, String noHandphone, Date tanggalLahir, String status, String createdBy, LocalDateTime createdDate, String modifBy, LocalDateTime modifDate, String password) {
+    public Karyawan(String npk, String namaKaryawan, String fotoKaryawan, String plant, String departemen, String email, String noHandphone, Date tanggalLahir, String status, String createdBy, LocalDateTime createdDate, String modifBy, LocalDateTime modifDate, String password, String jabatan) {
         this.npk = npk;
         this.namaKaryawan = namaKaryawan;
         this.fotoKaryawan = fotoKaryawan;
@@ -69,6 +72,7 @@ public class Karyawan {
         this.modifBy = modifBy;
         this.modifDate = modifDate;
         this.password = password;
+        this.jabatan = jabatan;
     }
 
     public Karyawan(String kryNpk) {
@@ -185,5 +189,13 @@ public class Karyawan {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getJabatan() {
+        return jabatan;
+    }
+
+    public void setJabatan(String jabatan) {
+        this.jabatan = jabatan;
     }
 }
