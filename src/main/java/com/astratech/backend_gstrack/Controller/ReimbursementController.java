@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public class ReimbursementController {
      * Endpoint untuk mendapatkan daftar reimbursement berdasarkan NPK dan tahun.
      * URL: GET /api/reimbursement/list?npk=230093&year=2024
      */
-    @GetMapping("/list")
+    @GetMapping("/list-karyawan")
     public ResponseEntity<?> getAllReimbursementsByNpkAndYear(
             @RequestParam("npk") String npk,
             @RequestParam("year") int year) {
@@ -51,6 +52,29 @@ public class ReimbursementController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Internal server error: " + e.getMessage()));
         }
+    }
+
+    @GetMapping("/list-atasan")
+    public ResponseEntity<?> getAllReimbursementsByYear(
+            @RequestParam("year") int year) {
+        try {
+            List<ReimbursementDto> data = reimbursementService.getReimbursements(year);
+            if (data.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "No reimbursements found for the given criteria."));
+            }
+            return ResponseEntity.ok(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Internal server error: " + e.getMessage()));
+        }
+    }
+
+    @GetMapping("/earliest-year")
+    public ResponseEntity<Map<String, Integer>> getEarliestYear() {
+        int year = reimbursementService.getEarliestYear();
+        Map<String, Integer> response = new HashMap<>();
+        response.put("earliestYear", year);
+        return ResponseEntity.ok(response);
     }
 
     /**

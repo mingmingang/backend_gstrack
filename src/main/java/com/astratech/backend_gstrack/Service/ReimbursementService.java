@@ -37,10 +37,24 @@ public class ReimbursementService {
     }
 
     @Transactional(readOnly = true)
+    public List<ReimbursementDto> getReimbursements(int year) {
+        List<Reimbursement> reimbursementList = reimbursementRepository.findReimbursementsByYear(year);
+        return reimbursementList.stream()
+                .map(this::convertToDto) // Pastikan DTO tidak memuat byte[]
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
     public ReimbursementDto getReimbursementById(BigInteger rbmId) {
         Reimbursement reimbursement = reimbursementRepository.findById(rbmId)
                 .orElseThrow(() -> new NotFoundException("Reimbursement with ID " + rbmId + " not found."));
         return convertToDto(reimbursement);
+    }
+
+    @Transactional(readOnly = true)
+    public int getEarliestYear() {
+        Integer earliestYear = reimbursementRepository.findEarliestYear();
+        return earliestYear != null ? earliestYear : LocalDate.now().getYear();
     }
 
 
