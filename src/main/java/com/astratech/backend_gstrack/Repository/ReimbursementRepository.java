@@ -30,6 +30,7 @@ public interface ReimbursementRepository extends JpaRepository<Reimbursement, Bi
     List<Reimbursement> findReimbursementsByNpkAndYear(@Param("npk") String npk, @Param("year") int year);
 
     @Query("SELECT r FROM Reimbursement r " +
+            "WHERE YEAR(r.rbmCreatedDate) = :year " +
             "ORDER BY r.rbmCreatedDate DESC")
     List<Reimbursement> findReimbursementsByYear(@Param("year") int year);
 
