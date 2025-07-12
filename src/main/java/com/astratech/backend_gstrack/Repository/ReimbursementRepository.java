@@ -1,5 +1,6 @@
 package com.astratech.backend_gstrack.Repository;
 
+import com.astratech.backend_gstrack.VO.DataBantuan.Orang;
 import com.astratech.backend_gstrack.VO.Reimbursement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,18 +23,13 @@ public interface ReimbursementRepository extends JpaRepository<Reimbursement, Bi
      * @return List of Reimbursement entities.
      */
     @Query("SELECT r FROM Reimbursement r " +
-            "LEFT JOIN FETCH r.karyawan k " +
-            "LEFT JOIN FETCH r.keluarga kl " +
-            "LEFT JOIN FETCH kl.orang o " +
+            "LEFT JOIN FETCH r.orang o " +
+            "LEFT JOIN FETCH o.karyawan k " +
             "WHERE k.npk = :npk AND YEAR(r.rbmCreatedDate) = :year " +
             "ORDER BY r.rbmCreatedDate DESC")
     List<Reimbursement> findReimbursementsByNpkAndYear(@Param("npk") String npk, @Param("year") int year);
 
     @Query("SELECT r FROM Reimbursement r " +
-            "LEFT JOIN FETCH r.karyawan k " +
-            "LEFT JOIN FETCH r.keluarga kl " +
-            "LEFT JOIN FETCH kl.orang o " +
-            "WHERE YEAR(r.rbmCreatedDate) = :year " +
             "ORDER BY r.rbmCreatedDate DESC")
     List<Reimbursement> findReimbursementsByYear(@Param("year") int year);
 
@@ -62,4 +58,7 @@ public interface ReimbursementRepository extends JpaRepository<Reimbursement, Bi
      */
     @Query("SELECT COUNT(r) FROM Reimbursement r WHERE r.rbmId >= :startRange AND r.rbmId <= :endRange")
     long countByIdInRange(@Param("startRange") BigInteger startRange, @Param("endRange") BigInteger endRange);
+
+    @Query("SELECT r FROM Reimbursement r LEFT JOIN FETCH r.orang WHERE r.karyawan.npk = :npk")
+    List<Orang> findOrangByNpk(@Param("npk") String npk);
 }

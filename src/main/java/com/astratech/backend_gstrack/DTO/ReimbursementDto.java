@@ -10,7 +10,7 @@ public class ReimbursementDto {
     // Kolom-kolom yang ada di gs_track_reimbursement
     private BigInteger rbmId;
     private String kryNpk;
-    private Integer klgId;
+    private BigInteger orgId;
     private String rbmTipe;
     private Date rbmTanggalMulai;
     private Date rbmTanggalSelesai;
@@ -55,12 +55,12 @@ public class ReimbursementDto {
         this.kryNpk = kryNpk;
     }
 
-    public Integer getKlgId() {
-        return klgId;
+    public BigInteger getOrgId() {
+        return orgId;
     }
 
-    public void setKlgId(Integer klgId) {
-        this.klgId = klgId;
+    public void setOrgId(BigInteger orgId) {
+        this.orgId = orgId;
     }
 
     public String getRbmTipe() {

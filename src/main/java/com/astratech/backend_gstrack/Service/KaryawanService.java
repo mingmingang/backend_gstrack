@@ -1,7 +1,8 @@
 package com.astratech.backend_gstrack.Service;
 
 import com.astratech.backend_gstrack.Repository.KaryawanRepository;
-import com.astratech.backend_gstrack.Repository.RepositoryBantuan.KeluargaRepository; // PERUBAHAN 1: Tambahkan import untuk KeluargaRepository
+import com.astratech.backend_gstrack.Repository.RepositoryBantuan.OrangRepository;
+import com.astratech.backend_gstrack.VO.DataBantuan.Orang;
 import com.astratech.backend_gstrack.VO.Karyawan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,51 +21,47 @@ public class KaryawanService {
     private KaryawanRepository karyawanRepository;
 
     @Autowired
-    private KeluargaRepository keluargaRepository; // PERUBAHAN 4: Injeksi dependency KeluargaRepository
+    private OrangRepository orangRepository; // PERUBAHAN 4: Injeksi dependency KeluargaRepository
 
 
-    // === METHOD BARU UNTUK KEBUTUHAN HALAMAN "TAMBAH REIMBURSEMENT" ===
     /**
-     * Mengambil data dasar karyawan (NPK, Nama) dan daftar keluarganya.
-     * Dijalankan dalam satu transaksi read-only untuk konsistensi data.
+     * [LOGIKA DIPERBAIKI]
+     * Mengambil data dasar karyawan (NPK, Nama) dan daftar keluarganya (anak, istri, dll).
+     * Data keluarga diambil dari tabel 'gs_track_orang', bukan dari histori reimbursement.
      * @param npk Nomor Pokok Karyawan
-     * @return Map yang berisi data karyawan dan list keluarga, atau null jika karyawan tidak ditemukan.
+     * @return Map yang berisi data karyawan dan daftar keluarganya.
      */
-    @Transactional(readOnly = true) // PERUBAHAN 5: Menambahkan method baru
+    @Transactional(readOnly = true)
     public Map<String, Object> getUserDataWithFamily(String npk) {
-        // Langkah 1: Cari data karyawan berdasarkan NPK. findByNpk sudah Anda miliki.
+        // Langkah 1: Cari data karyawan berdasarkan NPK. (Sudah benar)
         Karyawan karyawan = karyawanRepository.findByNpk(npk);
 
-        // Jika karyawan tidak ditemukan, kembalikan null agar controller bisa mengirim 404
+        // Jika karyawan tidak ditemukan, kembalikan null agar controller bisa mengirim 404 Not Found
         if (karyawan == null) {
             return null;
         }
 
-        // Langkah 2: Panggil method dari KeluargaRepository untuk mendapatkan daftar keluarga.
-        // Anda perlu memastikan KeluargaRepository memiliki method findKeluargaByNpk.
-        // Kita akan menggunakan stream untuk mengubah list Keluarga VO menjadi list Map<String, Object>.
-        List<Map<String, Object>> keluargaList = keluargaRepository.findKeluargaByNpk(npk).stream()
-                .map(keluarga -> {
-                    Map<String, Object> dataKeluarga = new HashMap<>();
-                    dataKeluarga.put("klg_id", keluarga.getKlgId());
+        // --- [PERBAIKAN 2: Sumber Data yang Benar] ---
+        // Panggil method dari OrangRepository untuk mendapatkan daftar keluarga berdasarkan NPK Karyawan.
+        List<Orang> daftarKeluarga = orangRepository.findByKryNpk(npk);
 
-                    // Ambil data dari relasi 'orang' jika ada, untuk menghindari NullPointerException
-                    if (keluarga.getOrang() != null) {
-                        dataKeluarga.put("org_nama", keluarga.getOrang().getOrgNama());
-                        dataKeluarga.put("org_hubungan", keluarga.getOrang().getOrgHubungan());
-                    } else {
-                        dataKeluarga.put("org_nama", "Data tidak lengkap");
-                        dataKeluarga.put("org_hubungan", "-");
-                    }
-                    return dataKeluarga;
+        // Ubah List<Orang> menjadi List<Map<String, Object>> sesuai format JSON yang diinginkan
+        List<Map<String, Object>> keluargaListJson = daftarKeluarga.stream()
+                .map(orang -> { // 'orang' di sini adalah objek dari entitas Orang
+                    Map<String, Object> dataOrang = new HashMap<>();
+                    dataOrang.put("org_id", orang.getOrgId());
+                    dataOrang.put("org_nama", orang.getOrgNama());
+                    dataOrang.put("org_hubungan", orang.getOrgHubungan());
+                    return dataOrang;
                 }).collect(Collectors.toList());
 
 
-        // Langkah 3: Gabungkan semua data ke dalam satu Map dengan format yang diharapkan frontend
+        // Langkah 3: Gabungkan semua data ke dalam satu Map
         Map<String, Object> responseData = new HashMap<>();
-        responseData.put("kry_npk", karyawan.getNpk());
-        responseData.put("kry_nama", karyawan.getNamaKaryawan()); // Sesuaikan getter jika namanya berbeda
-        responseData.put("keluarga", keluargaList);
+        responseData.put("kry_npk", karyawan.getNpk()); // Pastikan nama getter sesuai di entitas Karyawan
+        responseData.put("kry_nama", karyawan.getNamaKaryawan());
+        // [PERBAIKAN 3: Ganti nama key agar lebih deskriptif]
+        responseData.put("keluarga", keluargaListJson);
 
         return responseData;
     }
