@@ -20,8 +20,25 @@ public class Kehadiran {
     private LocalDateTime masukAbsen;
     @Column(name = "jam_keluar")
     private LocalDateTime keluarAbsen;
-    @Column(name = "status_kehairan")
+    @Column(name = "status_kehadiran")
     private Integer indikatorKehadiran;
+    @Column(name = "longitude_masuk")
+    private Double longitudeMasuk;
+
+    @Column(name = "latitude_masuk")
+    private Double latitudeMasuk;
+
+    @Column(name = "longitude_keluar")
+    private Double longitudeKeluar;
+
+    @Column(name = "latitude_keluar")
+    private Double latitudeKeluar;
+
+    @Column(name = "foto_masuk")
+    private String fotoMasuk;
+
+    @Column(name = "foto_keluar")
+    private String fotoKeluar;
     public Kehadiran()
     {}
 
@@ -73,12 +90,66 @@ public class Kehadiran {
         this.indikatorKehadiran = indikatorKehadiran;
     }
 
-    public Kehadiran(Integer idAbsen, String idKaryawan, Date tanggalMasuk, LocalDateTime masukAbsen, LocalDateTime keluarAbsen, Integer indikatorKehadiran) {
+    public Double getLongitudeMasuk() {
+        return longitudeMasuk;
+    }
+
+    public void setLongitudeMasuk(Double longitudeMasuk) {
+        this.longitudeMasuk = longitudeMasuk;
+    }
+
+    public Double getLatitudeMasuk() {
+        return latitudeMasuk;
+    }
+
+    public void setLatitudeMasuk(Double latitudeMasuk) {
+        this.latitudeMasuk = latitudeMasuk;
+    }
+
+    public Double getLongitudeKeluar() {
+        return longitudeKeluar;
+    }
+
+    public void setLongitudeKeluar(Double longitudeKeluar) {
+        this.longitudeKeluar = longitudeKeluar;
+    }
+
+    public Double getLatitudeKeluar() {
+        return latitudeKeluar;
+    }
+
+    public void setLatitudeKeluar(Double latitudeKeluar) {
+        this.latitudeKeluar = latitudeKeluar;
+    }
+
+    public String getFotoMasuk() {
+        return fotoMasuk;
+    }
+
+    public void setFotoMasuk(String fotoMasuk) {
+        this.fotoMasuk = fotoMasuk;
+    }
+
+    public String getFotoKeluar() {
+        return fotoKeluar;
+    }
+
+    public void setFotoKeluar(String fotoKeluar) {
+        this.fotoKeluar = fotoKeluar;
+    }
+
+    public Kehadiran(Integer idAbsen, String idKaryawan, Date tanggalMasuk, LocalDateTime masukAbsen, LocalDateTime keluarAbsen, Integer indikatorKehadiran, Double longitudeMasuk, Double latitudeMasuk, Double longitudeKeluar, Double latitudeKeluar, String fotoMasuk, String fotoKeluar) {
         this.idAbsen = idAbsen;
         this.idKaryawan = idKaryawan;
         this.tanggalMasuk = tanggalMasuk;
         this.masukAbsen = masukAbsen;
         this.keluarAbsen = keluarAbsen;
         this.indikatorKehadiran = indikatorKehadiran;
+        this.longitudeMasuk = longitudeMasuk;
+        this.latitudeMasuk = latitudeMasuk;
+        this.longitudeKeluar = longitudeKeluar;
+        this.latitudeKeluar = latitudeKeluar;
+        this.fotoMasuk = fotoMasuk;
+        this.fotoKeluar = fotoKeluar;
     }
 }
