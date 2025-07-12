@@ -1,7 +1,7 @@
 package com.astratech.backend_gstrack.VO;
 
 import com.astratech.backend_gstrack.VO.DataBantuan.Diagnosa;
-import com.astratech.backend_gstrack.VO.DataBantuan.Keluarga;
+import com.astratech.backend_gstrack.VO.DataBantuan.Orang;
 import com.astratech.backend_gstrack.VO.DataBantuan.RumahSakit;
 import jakarta.persistence.*;
 
@@ -23,12 +23,12 @@ public class Reimbursement {
     @JoinColumn(name = "kry_npk", referencedColumnName = "kry_npk", insertable = false, updatable = false)
     private Karyawan karyawan;
 
-    @Column(name = "klg_id")
-    private Integer klgId;
+    @Column(name = "org_id")
+    private BigInteger orgId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "klg_id", referencedColumnName = "klg_id", insertable = false, updatable = false)
-    private Keluarga keluarga;
+    @JoinColumn(name = "org_id", referencedColumnName = "org_id", insertable = false, updatable = false)
+    private Orang orang;
 
     @Column(name = "rbm_tipe")
     private String rbmTipe;
@@ -99,12 +99,12 @@ public class Reimbursement {
     public Reimbursement() {
     }
 
-    public Reimbursement(BigInteger rbmId, String kryNpk, Karyawan karyawan, Integer klgId, Keluarga keluarga, String rbmTipe, Date rbmTanggalMulai, Date rbmTanggalSelesai, BigDecimal rbmCost, String dgsId, Diagnosa diagnosa, String rbmDiagnosaOther, Integer rsId, RumahSakit rumahSakit, String rbmDokter, byte[] rbmFilePathKwitansi, byte[] rbmFilePathRincianObat, byte[] rbmFilePathHasilLab, byte[] rbmFilePathResumeMedis, String rbmStatusSubmit, String rbmCreatedBy, Date rbmCreatedDate, String rbmModifyBy, Date rbmModifyDate, String rbmAlasanPembatalan) {
+    public Reimbursement(BigInteger rbmId, String kryNpk, Karyawan karyawan, BigInteger orgId, Orang orang, String rbmTipe, Date rbmTanggalMulai, Date rbmTanggalSelesai, BigDecimal rbmCost, String dgsId, Diagnosa diagnosa, String rbmDiagnosaOther, Integer rsId, RumahSakit rumahSakit, String rbmDokter, byte[] rbmFilePathKwitansi, byte[] rbmFilePathRincianObat, byte[] rbmFilePathHasilLab, byte[] rbmFilePathResumeMedis, String rbmStatusSubmit, String rbmCreatedBy, Date rbmCreatedDate, String rbmModifyBy, Date rbmModifyDate, String rbmAlasanPembatalan) {
         this.rbmId = rbmId;
         this.kryNpk = kryNpk;
         this.karyawan = karyawan;
-        this.klgId = klgId;
-        this.keluarga = keluarga;
+        this.orgId = orgId;
+        this.orang = orang;
         this.rbmTipe = rbmTipe;
         this.rbmTanggalMulai = rbmTanggalMulai;
         this.rbmTanggalSelesai = rbmTanggalSelesai;
@@ -151,20 +151,20 @@ public class Reimbursement {
         this.karyawan = karyawan;
     }
 
-    public Integer getKlgId() {
-        return klgId;
+    public BigInteger getOrgId() {
+        return orgId;
     }
 
-    public void setKlgId(Integer klgId) {
-        this.klgId = klgId;
+    public void setOrgId(BigInteger orgId) {
+        this.orgId = orgId;
     }
 
-    public Keluarga getKeluarga() {
-        return keluarga;
+    public Orang getOrang() {
+        return orang;
     }
 
-    public void setKeluarga(Keluarga keluarga) {
-        this.keluarga = keluarga;
+    public void setOrang(Orang orang) {
+        this.orang = orang;
     }
 
     public String getRbmTipe() {

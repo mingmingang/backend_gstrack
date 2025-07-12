@@ -108,11 +108,12 @@ public class ReimbursementController {
      */
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Map<String, Object>> addReimbursement(
-            // --- Pastikan nama-nama ini SAMA PERSIS dengan key di FormData React Native ---
-
             // --- Data Teks ---
             @RequestParam("kry_npk") String kryNpk,
-            @RequestParam("klg_id") Integer klgId,
+
+            // [PERBAIKAN] Terima sebagai String untuk menghindari masalah konversi otomatis
+            @RequestParam("org_id") String orgIdString,
+
             @RequestParam("rbm_tipe") String rbmTipe,
             @RequestParam("rbm_cost") BigDecimal rbmCost,
             @RequestParam("rbm_dokter") String rbmDokter,
@@ -132,21 +133,31 @@ public class ReimbursementController {
             @RequestParam(value = "rbm_file_path_resume_medis", required = false) MultipartFile fileResumeMedis
     ) {
         try {
+            // [PERBAIKAN] Konversi manual dari String ke BigInteger
+            BigInteger orgId = new BigInteger(orgIdString);
+
             Reimbursement savedReimbursement = reimbursementService.saveReimbursement(
-                    kryNpk, klgId, rbmTipe, rbmCost, rbmDokter, rbmCreatedBy,
+                    kryNpk, orgId, rbmTipe, rbmCost, rbmDokter, rbmCreatedBy, // Gunakan orgId yang sudah dikonversi
                     dgsId, rsId, rbmTanggalMulai, rbmTanggalSelesai, rbmDiagnosaOther,
                     fileKwitansi, fileRincianObat, fileHasilLab, fileResumeMedis
             );
 
-            // Respon sukses
+            // Respon sukses (tidak ada perubahan di sini)
             Map<String, Object> response = Map.of(
                     "message", "Reimbursement submitted successfully.",
-                    "id", savedReimbursement.getRbmId().toString() // kirim id sebagai string
+                    "id", savedReimbursement.getRbmId().toString()
             );
-            return ResponseEntity.status(HttpStatus.CREATED).body(response); // Gunakan 201 CREATED untuk resource baru
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        } catch (NumberFormatException e) {
+            // [BARU] Tambahkan penanganan error spesifik untuk konversi
+            e.printStackTrace();
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", "Invalid format for 'org_id'. Expected a valid number, but received: " + orgIdString));
 
         } catch (Exception e) {
-            e.printStackTrace(); // Penting untuk debugging di log server
+            e.printStackTrace();
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("message", "Failed to submit reimbursement: " + e.getMessage()));

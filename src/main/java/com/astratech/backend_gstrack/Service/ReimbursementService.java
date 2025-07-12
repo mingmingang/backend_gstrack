@@ -1,6 +1,5 @@
 package com.astratech.backend_gstrack.Service;
 
-import com.astratech.backend_gstrack.DTO.PembatalanReimbursementDto;
 import com.astratech.backend_gstrack.DTO.ReimbursementDto;
 import com.astratech.backend_gstrack.Repository.ReimbursementRepository;
 import com.astratech.backend_gstrack.VO.Reimbursement;
@@ -61,7 +60,7 @@ public class ReimbursementService {
     // ============== FUNGSI UNTUK MENULIS DATA (ADD/CREATE) DENGAN VARBINARY ==============
     @Transactional
     public Reimbursement saveReimbursement(
-            String kryNpk, Integer klgId, String rbmTipe, BigDecimal rbmCost, String rbmDokter, String rbmCreatedBy,
+            String kryNpk, BigInteger orgId, String rbmTipe, BigDecimal rbmCost, String rbmDokter, String rbmCreatedBy,
             String dgsId, Integer rsId, Date rbmTanggalMulai, Date rbmTanggalSelesai, String rbmDiagnosaOther,
             MultipartFile fileKwitansi, MultipartFile fileRincianObat, MultipartFile fileHasilLab, MultipartFile fileResumeMedis
     ) throws IOException {
@@ -74,7 +73,7 @@ public class ReimbursementService {
         // Set semua data teks dan numerik lainnya
         newReimbursement.setKryNpk(kryNpk);
         newReimbursement.setDgsId(dgsId);
-        newReimbursement.setKlgId(klgId);
+        newReimbursement.setOrgId(orgId);
         newReimbursement.setRsId(rsId);
         newReimbursement.setRbmTipe(rbmTipe);
         newReimbursement.setRbmCost(rbmCost);
@@ -173,11 +172,11 @@ public class ReimbursementService {
             dto.setKryNama(reimbursement.getKaryawan().getNamaKaryawan());
         }
 
-        if (reimbursement.getKeluarga() != null) {
-            dto.setKlgId(reimbursement.getKeluarga().getKlgId());
-            if (reimbursement.getKeluarga().getOrang() != null) {
-                dto.setOrgNama(reimbursement.getKeluarga().getOrang().getOrgNama());
-                dto.setOrgHubungan(reimbursement.getKeluarga().getOrang().getOrgHubungan());
+        if (reimbursement.getOrang() != null) {
+            dto.setOrgId(reimbursement.getOrang().getOrgId());
+            if (reimbursement.getOrang() != null) {
+                dto.setOrgNama(reimbursement.getOrang().getOrgNama());
+                dto.setOrgHubungan(reimbursement.getOrang().getOrgHubungan());
             }
         }
 
