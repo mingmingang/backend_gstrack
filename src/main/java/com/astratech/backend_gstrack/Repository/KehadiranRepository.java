@@ -16,4 +16,8 @@ public interface KehadiranRepository extends JpaRepository<Kehadiran, Integer> {
     List<String> FilterNpk(Date tanggal);
     @Query(value = qValidateKeluar, nativeQuery = true)
     Kehadiran findByKryNpkAndTanggal(String kryNpk, Date tanggal);
+    @Query(value = qCurrentKehadiranSession, nativeQuery = true)
+    Kehadiran currentSessionKehadiran(Date tanggal, String npk);
+    @Query(value = qCurrentLoggedKehadiran, nativeQuery = true)
+    List<Kehadiran> currentLoggedKehadiran(String npk);
 }

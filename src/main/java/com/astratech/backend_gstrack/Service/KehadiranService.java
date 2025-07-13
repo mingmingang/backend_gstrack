@@ -56,6 +56,7 @@ public class KehadiranService {
 
             // Set nama file ke entity
             kehadiran.setFotoMasuk(fileName);
+            kehadiran.setMasukAbsen(LocalDateTime.now());
 
             // Save ke DB
             Kehadiran saved = kehadiranRepository.save(kehadiran);
@@ -74,9 +75,10 @@ public class KehadiranService {
 
 
 
-    public Result checkOut(String npk, LocalDate tanggal, MultipartFile foto) {
+    public Result checkOut(Kehadiran data, LocalDate tanggal, MultipartFile foto) {
         try {
             // Cari data berdasarkan npk & tanggal
+            String npk = data.getIdKaryawan();
             Optional<Kehadiran> optional = Optional.ofNullable(kehadiranRepository.findByKryNpkAndTanggal(npk, Date.valueOf(tanggal)));
             if (optional.isEmpty()) {
                 return new Result(404, "DATA TIDAK DITEMUKAN", null);
@@ -98,9 +100,10 @@ public class KehadiranService {
 
             // Set field foto_keluar
             kehadiran.setFotoKeluar(fileName);
-
             // Update jam_keluar (optional, kalau mau otomatis)
             kehadiran.setKeluarAbsen(LocalDateTime.now());
+            kehadiran.setLongitudeKeluar(data.getLongitudeKeluar());
+            kehadiran.setLatitudeKeluar(data.getLatitudeKeluar());
 
             Kehadiran updated = kehadiranRepository.save(kehadiran);
 
@@ -109,6 +112,16 @@ public class KehadiranService {
             e.printStackTrace();
             return new Result(500, "GAGAL UPLOAD FOTO", null);
         }
+    }
+
+    public Result currentSessionKehadiran(Kehadiran kehadiran) {
+        Kehadiran current = kehadiranRepository.currentSessionKehadiran(Date.valueOf(LocalDate.now()),kehadiran.getIdKaryawan());
+        return new Result(200, "SUKSES", current);
+    }
+
+    public Result currentLoggedKehadiran(Kehadiran kehadiran) {
+        List<Kehadiran> kehadiranList = kehadiranRepository.currentLoggedKehadiran(kehadiran.getIdKaryawan());
+        return new Result(200, "SUKSES", kehadiranList);
     }
 
 }

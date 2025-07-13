@@ -61,6 +61,8 @@ public class KaryawanController {
     @PostMapping("/karyawan/login")
     public Object login(HttpServletResponse response, @RequestBody Karyawan loginRequest) {
         Karyawan karyawan = karyawanService.getKaryawanByNpk(loginRequest.getNpk());
+//        System.out.println(loginRequest.getNpk());
+//        System.out.println(karyawan);
         if (karyawan != null && karyawan.getPassword().equals(loginRequest.getPassword())) {
             return new Result(200, "Login Successful", karyawan);
         } else {

@@ -19,7 +19,7 @@ public class KehadiranScheduler {
     KehadiranRepository kehadiranRepository;
     @Autowired
     KaryawanRepository karyawanRepository;
-    @Scheduled(cron = "0 0 22 * * MON-FRI", zone = "Asia/Jakarta")
+    @Scheduled(cron = "0 0 9 * * MON-FRI", zone = "Asia/Jakarta")
     public void validateKehadiran() {
         if (LocalTime.now().isAfter(LocalTime.of(9, 0))) {
             Date today = Date.valueOf(LocalDate.now());
