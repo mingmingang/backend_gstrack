@@ -27,10 +27,7 @@ public class KehadiranController {
         return kehadiranService.getKehadiran(range.getStartDate(),range.getEndDate());
     }
     @PostMapping( value = "/checkin", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Result checkin(
-            @RequestPart("data") String data,
-            @RequestPart("foto") MultipartFile foto
-    ) throws JsonProcessingException {
+    public Result checkin(@RequestPart("data") String data, @RequestPart("foto") MultipartFile foto) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Kehadiran kehadiran = mapper.readValue(data, Kehadiran.class);
 
