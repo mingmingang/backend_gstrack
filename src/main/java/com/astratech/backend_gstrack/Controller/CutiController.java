@@ -96,18 +96,25 @@ public class CutiController {
             if (!directory.exists()) {
                 directory.mkdirs();
             }
+            String originalName = file.getOriginalFilename();
+            if (originalName == null || originalName.isBlank()) {
+                originalName = "file_" + System.currentTimeMillis() + ".jpg";
+            }
+            String cleanedName = originalName != null ? originalName.replaceAll("\\s+", "_") : "file";
+            String timestamp = String.valueOf(System.currentTimeMillis());
+            String finalFileName = timestamp + "_" + cleanedName;
 
-            String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-            File dest = new File(directory, fileName);
-
+            File dest = new File(directory, finalFileName);
             file.transferTo(dest);
-            return ResponseEntity.ok(fileName);
+
+            return ResponseEntity.ok(finalFileName);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Gagal upload file: " + e.getMessage());
         }
     }
+
 
     @GetMapping("/cuti/lampiran/{filename:.+}")
     public ResponseEntity<org.springframework.core.io.Resource> getLampiran(@PathVariable String filename) {
