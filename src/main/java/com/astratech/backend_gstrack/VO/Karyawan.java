@@ -15,7 +15,7 @@ public class Karyawan {
     @Column(name = "kry_nama_karyawan", length = 50)
     private String namaKaryawan;
 
-    @Column(name = "kry_foto_karyawan")
+    @Column(name = "kry_foto_karyawan", columnDefinition = "VARCHAR(MAX)")
     private String fotoKaryawan;
 
     @Column(name = "kry_plant", length = 10)
@@ -52,22 +52,18 @@ public class Karyawan {
     @Column(name = "kry_password")
     private String password;
 
-    @Column(name = "kry_jabatan", length = 50)
+    @Column(name = "kry_jabatan")
     private String jabatan;
 
-    @Column(name = "kry_status_kawin", length = 20)
+    @Column(name = "kry_status_kawin")
     private String statusKawin;
 
-    @Column(name = "kry_golongan", length = 20)
+    @Column(name = "kry_golongan")
     private String golongan;
-
-    @Transient
-    private String newPassword;
-
 
     public Karyawan() {}
 
-    public Karyawan(String npk, String namaKaryawan, String fotoKaryawan, String plant, String departemen, String email, String noHandphone, Date tanggalLahir, String status, String createdBy, LocalDateTime createdDate, String modifBy, LocalDateTime modifDate, String password, String jabatan, String statusKawin, String golongan) {
+    public Karyawan(String npk, String namaKaryawan, String fotoKaryawan, String plant, String departemen, String email, String noHandphone, Date tanggalLahir, String status, String createdBy, LocalDateTime createdDate, String modifBy, LocalDateTime modifDate, String password, String jabatan,  String statusKawin,  String golongan) {
         this.npk = npk;
         this.namaKaryawan = namaKaryawan;
         this.fotoKaryawan = fotoKaryawan;
@@ -85,6 +81,10 @@ public class Karyawan {
         this.jabatan = jabatan;
         this.statusKawin = statusKawin;
         this.golongan = golongan;
+    }
+
+    public Karyawan(String kryNpk) {
+        this.npk = kryNpk;
     }
 
     public String getNpk() {
@@ -222,12 +222,4 @@ public class Karyawan {
     public void setGolongan(String golongan) {
         this.golongan = golongan;
     }
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
-
 }
