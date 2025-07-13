@@ -3,15 +3,25 @@ package com.astratech.backend_gstrack.Request;
 import java.sql.Date;
 
 public class DateRange {
+    private String npk;
     private Date startDate;
     private Date endDate;
 
     public DateRange()
     {}
 
-    public DateRange(Date startDate, Date endDate) {
+    public DateRange(String npk, Date startDate, Date endDate) {
+        this.npk = npk;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public String getNpk() {
+        return npk;
+    }
+
+    public void setNpk(String npk) {
+        this.npk = npk;
     }
 
     public Date getStartDate() {
