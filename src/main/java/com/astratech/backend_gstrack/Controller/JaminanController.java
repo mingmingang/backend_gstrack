@@ -2,10 +2,10 @@
 package com.astratech.backend_gstrack.Controller;
 
 import com.astratech.backend_gstrack.Service.JaminanService;
+import com.astratech.backend_gstrack.VO.DataBantuan.Orang;
+import com.astratech.backend_gstrack.VO.DataBantuan.RumahSakit;
 import com.astratech.backend_gstrack.VO.Jaminan;
-import com.astratech.backend_gstrack.VO.Orang;
 import com.astratech.backend_gstrack.VO.Result;
-import com.astratech.backend_gstrack.VO.RumahSakit;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -55,13 +55,11 @@ public class JaminanController {
         }
     }
 
-    // ORANG
     @GetMapping("/keluarga")
     public List<Orang> getKeluargaByNpk(@RequestParam("npk") String npk) {
         return jaminanService.getOrangByKryNpk(npk);
     }
 
-    // RUMAH SAKIT
     @GetMapping("/rumah-sakit")
     public List<RumahSakit> getAllRumahSakit() {
         return jaminanService.getAllRumahSakit();
