@@ -10,6 +10,6 @@ import java.util.List;
 import static com.astratech.backend_gstrack.Constant.KehadiranConstant.qFilterTanggal;
 
 public interface KehadiranRepository extends JpaRepository<Kehadiran, Integer> {
-    @Query(value = qFilterTanggal)
+    @Query(value = qFilterTanggal, nativeQuery = true)
     List<Kehadiran> FilterDate(Date startDate, Date endDate);
 }

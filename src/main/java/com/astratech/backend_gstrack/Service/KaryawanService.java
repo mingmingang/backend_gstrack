@@ -4,6 +4,7 @@ import com.astratech.backend_gstrack.Repository.KaryawanRepository;
 import com.astratech.backend_gstrack.VO.Karyawan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -33,32 +34,25 @@ public class KaryawanService {
             return false;
         }
 
-        if (StringUtils.hasLength(karyawan.getNamaKaryawan())) {
-            existingKaryawan.setNamaKaryawan(karyawan.getNamaKaryawan());
-        }
-
-        if (StringUtils.hasLength(karyawan.getEmail())) {
-            existingKaryawan.setEmail(karyawan.getEmail());
-        }
-
-        if (StringUtils.hasLength(karyawan.getDepartemen())) {
-            existingKaryawan.setDepartemen(karyawan.getDepartemen());
-        }
-
-        if (StringUtils.hasLength(karyawan.getNoHandphone())) {
-            existingKaryawan.setNoHandphone(karyawan.getNoHandphone());
-        }
-
-        if (StringUtils.hasLength(karyawan.getPlant())) {
-            existingKaryawan.setPlant(karyawan.getPlant());
-        }
-
-        if (StringUtils.hasLength(karyawan.getStatus())) {
-            existingKaryawan.setStatus(karyawan.getStatus());
-        }
+        existingKaryawan.setNamaKaryawan(karyawan.getNamaKaryawan());
+        existingKaryawan.setEmail(karyawan.getEmail());
+        existingKaryawan.setDepartemen(karyawan.getDepartemen());
+        existingKaryawan.setNoHandphone(karyawan.getNoHandphone());
+        existingKaryawan.setPlant(karyawan.getPlant());
+        existingKaryawan.setStatus(karyawan.getStatus());
+        existingKaryawan.setFotoKaryawan(karyawan.getFotoKaryawan());
+        existingKaryawan.setTanggalLahir(karyawan.getTanggalLahir());
+        existingKaryawan.setModifBy(karyawan.getModifBy());
+        existingKaryawan.setModifDate(karyawan.getModifDate());
 
         karyawanRepository.save(existingKaryawan);
         return true;
+    }
+
+    @Transactional
+    public boolean updatePassword(String npk, String newPassword) {
+        int updated = karyawanRepository.updatePassword(npk, newPassword);
+        return updated > 0;
     }
 
     public boolean deleteKaryawan(String npk) {

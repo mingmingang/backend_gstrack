@@ -5,8 +5,17 @@ import com.astratech.backend_gstrack.VO.Karyawan;
 import com.astratech.backend_gstrack.VO.Result;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -68,4 +77,77 @@ public class KaryawanController {
             return new Result(401, "Invalid NPK or password");
         }
     }
+
+    @PutMapping("/karyawan/password")
+    public ResponseEntity<Result> changePassword(@RequestBody Karyawan param) {
+        Karyawan existing = karyawanService.getKaryawanByNpk(param.getNpk());
+        System.out.println(existing.toString());
+        if (existing == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Result(404, "Karyawan tidak ditemukan"));
+        }
+
+        if (!existing.getPassword().equals(param.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new Result(401, "Password lama tidak cocok"));
+        }
+
+        boolean isUpdated = karyawanService.updatePassword(param.getNpk(), param.getNewPassword());
+
+        if (isUpdated) {
+            return ResponseEntity.ok(new Result(200, "Password berhasil diubah"));
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new Result(500, "Gagal mengubah password"));
+        }
+    }
+
+
+    @PostMapping("/karyawan/upload-lampiran")
+    public ResponseEntity<String> uploadLampiran(@RequestParam("file") MultipartFile file) {
+        try {
+            String rootPath = System.getProperty("user.dir");
+            String folderPath = rootPath + File.separator + "uploads" + File.separator + "karyawan";
+
+            File directory = new File(folderPath);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+            String originalName = file.getOriginalFilename();
+            if (originalName == null || originalName.isBlank()) {
+                originalName = "file_" + System.currentTimeMillis() + ".jpg";
+            }
+            String cleanedName = originalName != null ? originalName.replaceAll("\\s+", "_") : "file";
+            String timestamp = String.valueOf(System.currentTimeMillis());
+            String finalFileName = timestamp + "_" + cleanedName;
+
+            File dest = new File(directory, finalFileName);
+            file.transferTo(dest);
+
+            return ResponseEntity.ok(finalFileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Gagal upload file: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/karyawan/lampiran/{filename:.+}")
+    public ResponseEntity<org.springframework.core.io.Resource> getLampiran(@PathVariable String filename) {
+        try {
+            Path filePath = Paths.get("uploads/karyawan").resolve(filename).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (!resource.exists()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }
