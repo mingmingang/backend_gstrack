@@ -15,7 +15,7 @@ public class Karyawan {
     @Column(name = "kry_nama_karyawan", length = 50)
     private String namaKaryawan;
 
-    @Column(name = "kry_foto_karyawan")
+    @Column(name = "kry_foto_karyawan", columnDefinition = "VARCHAR(MAX)")
     private String fotoKaryawan;
 
     @Column(name = "kry_plant", length = 10)
@@ -34,8 +34,32 @@ public class Karyawan {
     @Temporal(TemporalType.DATE)
     private Date tanggalLahir;
 
+    @Column(name = "kry_sisa_cuti")
+    private Integer sisaCuti;
+
+    @Column(name = "kry_sisa_cuti_besar")
+    private Integer sisaCutiBesar;
+
+    @Column(name = "kry_jumlah_plafon")
+    private Integer jumlahPlafon;
+
+    @Column(name = "kry_penggunaan_plafon")
+    private Integer penggunaanPlafon;
+
     @Column(name = "kry_status", length = 20)
     private String status;
+
+    @Column(name = "kry_password", length = 255)
+    private String password;
+
+    @Column(name = "kry_jabatan", length = 10)
+    private String jabatan;
+
+    @Column(name = "kry_status_kawin", length = 10)
+    private String statusKawin;
+
+    @Column(name = "kry_golongan")
+    private Integer golongan;
 
     @Column(name = "kry_created_by", columnDefinition = "VARCHAR(MAX)")
     private String createdBy;
@@ -49,26 +73,13 @@ public class Karyawan {
     @Column(name = "kry_modif_date")
     private LocalDateTime modifDate;
 
-    @Column(name = "kry_password")
-    private String password;
-
-    // 🆕 Tambahan field baru
-    @Column(name = "kry_jabatan", length = 50)
-    private String jabatan;
-
-    @Column(name = "kry_status_kawin", length = 20)
-    private String statusKawin;
-
-    @Column(name = "kry_golongan", length = 20)
-    private String golongan;
-
     @Transient
     private String newPassword;
 
+    public Karyawan() {
+    }
 
-    public Karyawan() {}
-
-    public Karyawan(String npk, String namaKaryawan, String fotoKaryawan, String plant, String departemen, String email, String noHandphone, Date tanggalLahir, String status, String createdBy, LocalDateTime createdDate, String modifBy, LocalDateTime modifDate, String password, String jabatan, String statusKawin, String golongan) {
+    public Karyawan(String npk, String namaKaryawan, String fotoKaryawan, String plant, String departemen, String email, String noHandphone, Date tanggalLahir, Integer sisaCuti, Integer sisaCutiBesar, Integer jumlahPlafon, Integer penggunaanPlafon, String status, String password, String jabatan, String statusKawin, Integer golongan, String createdBy, LocalDateTime createdDate, String modifBy, LocalDateTime modifDate, String newPassword) {
         this.npk = npk;
         this.namaKaryawan = namaKaryawan;
         this.fotoKaryawan = fotoKaryawan;
@@ -77,15 +88,20 @@ public class Karyawan {
         this.email = email;
         this.noHandphone = noHandphone;
         this.tanggalLahir = tanggalLahir;
+        this.sisaCuti = sisaCuti;
+        this.sisaCutiBesar = sisaCutiBesar;
+        this.jumlahPlafon = jumlahPlafon;
+        this.penggunaanPlafon = penggunaanPlafon;
         this.status = status;
-        this.createdBy = createdBy;
-        this.createdDate = createdDate;
-        this.modifBy = modifBy;
-        this.modifDate = modifDate;
         this.password = password;
         this.jabatan = jabatan;
         this.statusKawin = statusKawin;
         this.golongan = golongan;
+        this.createdBy = createdBy;
+        this.createdDate = createdDate;
+        this.modifBy = modifBy;
+        this.modifDate = modifDate;
+        this.newPassword = newPassword;
     }
 
     public String getNpk() {
@@ -152,12 +168,76 @@ public class Karyawan {
         this.tanggalLahir = tanggalLahir;
     }
 
+    public Integer getSisaCuti() {
+        return sisaCuti;
+    }
+
+    public void setSisaCuti(Integer sisaCuti) {
+        this.sisaCuti = sisaCuti;
+    }
+
+    public Integer getSisaCutiBesar() {
+        return sisaCutiBesar;
+    }
+
+    public void setSisaCutiBesar(Integer sisaCutiBesar) {
+        this.sisaCutiBesar = sisaCutiBesar;
+    }
+
+    public Integer getJumlahPlafon() {
+        return jumlahPlafon;
+    }
+
+    public void setJumlahPlafon(Integer jumlahPlafon) {
+        this.jumlahPlafon = jumlahPlafon;
+    }
+
+    public Integer getPenggunaanPlafon() {
+        return penggunaanPlafon;
+    }
+
+    public void setPenggunaanPlafon(Integer penggunaanPlafon) {
+        this.penggunaanPlafon = penggunaanPlafon;
+    }
+
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getJabatan() {
+        return jabatan;
+    }
+
+    public void setJabatan(String jabatan) {
+        this.jabatan = jabatan;
+    }
+
+    public String getStatusKawin() {
+        return statusKawin;
+    }
+
+    public void setStatusKawin(String statusKawin) {
+        this.statusKawin = statusKawin;
+    }
+
+    public Integer getGolongan() {
+        return golongan;
+    }
+
+    public void setGolongan(Integer golongan) {
+        this.golongan = golongan;
     }
 
     public String getCreatedBy() {
@@ -192,37 +272,6 @@ public class Karyawan {
         this.modifDate = modifDate;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getJabatan() {
-        return jabatan;
-    }
-
-    public void setJabatan(String jabatan) {
-        this.jabatan = jabatan;
-    }
-
-    public String getStatusKawin() {
-        return statusKawin;
-    }
-
-    public void setStatusKawin(String statusKawin) {
-        this.statusKawin = statusKawin;
-    }
-
-    public String getGolongan() {
-        return golongan;
-    }
-
-    public void setGolongan(String golongan) {
-        this.golongan = golongan;
-    }
     public String getNewPassword() {
         return newPassword;
     }
@@ -230,5 +279,4 @@ public class Karyawan {
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
     }
-
 }
