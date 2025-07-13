@@ -3,12 +3,11 @@ package com.astratech.backend_gstrack.Service;
 
 import com.astratech.backend_gstrack.Repository.JaminanRepository;
 import com.astratech.backend_gstrack.Repository.KaryawanRepository;
-import com.astratech.backend_gstrack.Repository.OrangRepository;
-import com.astratech.backend_gstrack.Repository.RumahSakitRepository;
+import com.astratech.backend_gstrack.Repository.RepositoryBantuan.OrangRepository;
+import com.astratech.backend_gstrack.Repository.RepositoryBantuan.RumahSakitRepository;
+import com.astratech.backend_gstrack.VO.DataBantuan.Orang;
+import com.astratech.backend_gstrack.VO.DataBantuan.RumahSakit;
 import com.astratech.backend_gstrack.VO.Jaminan;
-import com.astratech.backend_gstrack.VO.Karyawan;
-import com.astratech.backend_gstrack.VO.Orang;
-import com.astratech.backend_gstrack.VO.RumahSakit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

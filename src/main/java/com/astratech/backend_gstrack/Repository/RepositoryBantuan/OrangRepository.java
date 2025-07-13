@@ -12,7 +12,7 @@ public interface OrangRepository extends JpaRepository<Orang, Integer> {
     /**
      * Finds a list of Keluarga entities based on the NPK of the related Karyawan.
      * We use a custom JPQL query to define the logic explicitly.
-     * @param npk The Nomor Pokok Karyawan to search for.
+     * @ param npk The Nomor Pokok Karyawan to search for.
      * @return A list of matching Keluarga entities.
      */
 //    @Query("SELECT o FROM Orang o WHERE o.karyawan.npk = :npk")
