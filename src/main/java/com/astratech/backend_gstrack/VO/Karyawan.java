@@ -52,7 +52,6 @@ public class Karyawan {
     @Column(name = "kry_password")
     private String password;
 
-    // 🆕 Tambahan field baru
     @Column(name = "kry_jabatan", length = 50)
     private String jabatan;
 
