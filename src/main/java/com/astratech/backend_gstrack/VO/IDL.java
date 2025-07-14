@@ -1,6 +1,8 @@
 package com.astratech.backend_gstrack.VO;
 
 import jakarta.persistence.*;
+import org.springframework.cglib.core.Local;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.LocalDateTime;
@@ -53,6 +55,12 @@ public class IDL {
     @Column(name = "idl_status", length = 20)
     private String idlStatus;
 
+    @Column(name = "idl_berangkat")
+    private LocalDateTime idlBerangkat;
+
+    @Column(name = "idl_pulang")
+    private LocalDateTime idlPulang;
+
     @Column(name = "idl_created_by", columnDefinition = "varchar(max)")
     private String idlCreatedBy;
 
@@ -68,7 +76,7 @@ public class IDL {
     public IDL() {
     }
 
-    public IDL(Integer idlId, String idlNoRequest, String idlNpk, String idlJenisKegiatan, LocalDate idlTanggalBerangkat, LocalTime idlWaktuBerangkat, LocalDate idlTanggalKembali, LocalTime idlWaktuKembali, String idlLokasiPertama, String idlLokasiKedua, String idlLokasiKetiga, String idlKeterangan, String idlBerkasLampiran, String idlStatus, String idlCreatedBy, LocalDateTime idlCreatedDate, String idlModifBy, LocalDateTime idlModifDate) {
+    public IDL(Integer idlId, String idlNoRequest, String idlNpk, String idlJenisKegiatan, LocalDate idlTanggalBerangkat, LocalTime idlWaktuBerangkat, LocalDate idlTanggalKembali, LocalTime idlWaktuKembali, String idlLokasiPertama, String idlLokasiKedua, String idlLokasiKetiga, String idlKeterangan, String idlBerkasLampiran, String idlStatus, LocalDateTime idlBerangkat, LocalDateTime idlPulang, String idlCreatedBy, LocalDateTime idlCreatedDate, String idlModifBy, LocalDateTime idlModifDate) {
         this.idlId = idlId;
         this.idlNoRequest = idlNoRequest;
         this.idlNpk = idlNpk;
@@ -83,6 +91,8 @@ public class IDL {
         this.idlKeterangan = idlKeterangan;
         this.idlBerkasLampiran = idlBerkasLampiran;
         this.idlStatus = idlStatus;
+        this.idlBerangkat = idlBerangkat;
+        this.idlPulang = idlPulang;
         this.idlCreatedBy = idlCreatedBy;
         this.idlCreatedDate = idlCreatedDate;
         this.idlModifBy = idlModifBy;
@@ -199,6 +209,22 @@ public class IDL {
 
     public void setIdlStatus(String idlStatus) {
         this.idlStatus = idlStatus;
+    }
+
+    public LocalDateTime getIdlBerangkat() {
+        return idlBerangkat;
+    }
+
+    public void setIdlBerangkat(LocalDateTime idlBerangkat) {
+        this.idlBerangkat = idlBerangkat;
+    }
+
+    public LocalDateTime getIdlPulang() {
+        return idlPulang;
+    }
+
+    public void setIdlPulang(LocalDateTime idlPulang) {
+        this.idlPulang = idlPulang;
     }
 
     public String getIdlCreatedBy() {

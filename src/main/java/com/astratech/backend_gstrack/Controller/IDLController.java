@@ -5,6 +5,7 @@ import com.astratech.backend_gstrack.VO.IDL;
 import com.astratech.backend_gstrack.VO.Result;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,23 +21,32 @@ public class IDLController {
     @GetMapping("/IDL/{id}")
     public IDL getIDLbyIdlNoRequest(@PathVariable("id") String idlNoRequest) { return idlService.getIDLbyIdlNoRequest(idlNoRequest); }
 
+    @GetMapping("/IDL/available-years")
+    public ResponseEntity<List<Integer>> getAvailableYears(@RequestParam String idlNpk) {
+        List<Integer> years = idlService.getAvailableYearsByNpk(idlNpk); // hasilnya harus List<Integer>
+        return ResponseEntity.ok(years);
+    }
+
     @GetMapping("/IDL/karyawan")
     public List<IDL> getIDLbyIdlNpk(
             @RequestParam("idlNpk") String idlNpk,
             @RequestParam(value = "status", required = false) String idlStatus,
             @RequestParam(value = "year", required = false) Integer year
     ) {
-        if (idlStatus != null && idlStatus.isEmpty()
-        && year != null && year < 2020) {
+        boolean hasStatus = idlStatus != null && !idlStatus.isEmpty();
+        boolean hasYear = year != null;
+
+        if (hasStatus && hasYear) {
             return idlService.getIDLbyIdlNpkAndIdlStatusAndIdlCreatedDate(idlNpk, idlStatus, year);
-        } else if (idlStatus != null && idlStatus.isEmpty()) {
+        } else if (hasStatus) {
             return idlService.getIDLbyIdlNpkAndIdlStatus(idlNpk, idlStatus);
-        } else if (year != null && year < 2020) {
+        } else if (hasYear) {
             return idlService.getIDLbyIdlNpkAndIdlCreatedDate(idlNpk, year);
         } else {
             return idlService.getIDLbyIdlNpk(idlNpk);
         }
     }
+
 
     @PostMapping("/IDL")
     public Object saveIDL(HttpServletResponse response, @RequestBody IDL idl) {
