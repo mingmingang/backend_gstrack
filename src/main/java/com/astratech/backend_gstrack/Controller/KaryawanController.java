@@ -1,5 +1,6 @@
 package com.astratech.backend_gstrack.Controller;
 
+import com.astratech.backend_gstrack.Service.JaminanService;
 import com.astratech.backend_gstrack.Service.KaryawanService;
 import com.astratech.backend_gstrack.VO.Karyawan;
 import com.astratech.backend_gstrack.VO.Result;
@@ -23,6 +24,9 @@ public class KaryawanController {
 
     @Autowired
     private KaryawanService karyawanService;
+
+    @Autowired
+    private JaminanService jaminanService;
 
     @GetMapping("/karyawan")
     public List<Karyawan> getAllKaryawan() {
@@ -150,6 +154,11 @@ public class KaryawanController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @GetMapping("/karyawan/plafon")
+    public Integer[] getPlafonByNpk(@RequestParam("npk") String npk) {
+        return jaminanService.getPlafonByNpk(npk);
     }
 
 }

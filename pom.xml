@@ -5,7 +5,9 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.3</version>
+        <!-- ANDA MENGGUNAKAN VERSI 3.3.1 DI PERCAKAPAN SEBELUMNYA, SAYA AKAN GUNAKAN ITU.
+             Jika benar-benar 3.5.3, ubah saja di sini. -->
+        <version>3.3.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.astratech</groupId>
@@ -13,36 +15,45 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>backend_gstrack</name>
     <description>backend_gstrack</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
     <properties>
         <java.version>17</java.version>
     </properties>
     <dependencies>
+        <!-- ========================================================= -->
+        <!-- DEPENDENCY PENTING YANG HILANG - INI WAJIB ADA -->
+        <!-- ========================================================= -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jdbc</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!-- Dependency untuk Database dan JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
+        <!-- Opsional, Hapus jika tidak diperlukan. Biasanya starter-web sudah cukup -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
 
+        <!-- Tidak perlu starter-data-jdbc jika sudah pakai starter-data-jpa -->
+        <!--
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jdbc</artifactId>
+        </dependency>
+        -->
+
+        <!-- Dependency untuk Driver Database -->
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- Anda mungkin tidak butuh semua driver ini, simpan yang diperlukan saja -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
@@ -58,15 +69,12 @@
             <artifactId>mariadb-java-client</artifactId>
             <scope>runtime</scope>
         </dependency>
+
+        <!-- Dependency untuk Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-            <version>12.6.1.jre11</version> <!-- atau sesuaikan dengan JDK-mu -->
         </dependency>
     </dependencies>
 
