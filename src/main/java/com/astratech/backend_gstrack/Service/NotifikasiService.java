@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +29,7 @@ public class NotifikasiService {
     }
     public Result saveNotifkasi(Notifikasi notifikasi) {
         notifikasi.setStatusDibaca(0);
+        notifikasi.setTanggalNotif(LocalDateTime.now());
         String npk = notifikasi.getIdKaryawan();
         Token token = tokenRepositry.findByKryNpk(npk);
         String uniqueToken = token.getToken();
