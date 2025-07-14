@@ -65,10 +65,13 @@ public class Karyawan {
     @Transient
     private String newPassword;
 
+    @Column(name = "kry_alamat")
+    private String alamat;
+
 
     public Karyawan() {}
 
-    public Karyawan(String npk, String namaKaryawan, String fotoKaryawan, String plant, String departemen, String email, String noHandphone, Date tanggalLahir, String status, String createdBy, LocalDateTime createdDate, String modifBy, LocalDateTime modifDate, String password, String jabatan, String statusKawin, String golongan) {
+    public Karyawan(String npk, String namaKaryawan, String fotoKaryawan, String plant, String departemen, String email, String noHandphone, Date tanggalLahir, String status, String createdBy, LocalDateTime createdDate, String modifBy, LocalDateTime modifDate, String password, String jabatan, String statusKawin, String golongan, String alamat) {
         this.npk = npk;
         this.namaKaryawan = namaKaryawan;
         this.fotoKaryawan = fotoKaryawan;
@@ -86,8 +89,8 @@ public class Karyawan {
         this.jabatan = jabatan;
         this.statusKawin = statusKawin;
         this.golongan = golongan;
+        this.alamat = alamat;
     }
-
     public String getNpk() {
         return npk;
     }
@@ -230,5 +233,14 @@ public class Karyawan {
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
     }
+
+    public String getAlamat() {
+        return alamat;
+    }
+
+    public void setAlamat(String alamat) {
+        this.alamat = alamat;
+    }
+
 
 }
