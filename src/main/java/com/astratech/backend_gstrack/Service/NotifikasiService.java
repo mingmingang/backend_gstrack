@@ -63,8 +63,8 @@ public class NotifikasiService {
     }
 
     public Result updateStatusNotifkasi(Notifikasi notifikasi) {
-        String npk = notifikasi.getIdKaryawan();
-        Notifikasi data = notifikasiRepository.findByNPK(npk);
+        Integer notif = notifikasi.getIdNotif();
+        Notifikasi data = notifikasiRepository.findById(notif).get();
         data.setStatusDibaca(1);
         return new Result(200,"SUKSES",notifikasiRepository.save(data));
     }
