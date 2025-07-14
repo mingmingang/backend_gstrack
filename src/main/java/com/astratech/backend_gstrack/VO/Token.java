@@ -15,7 +15,7 @@ public class Token {
     private String idKaryawan;
     @Column(name = "token")
     private String token;
-    @Column(name = "create_at")
+    @Column(name = "created_at")
     private LocalDateTime createAt;
 
     public Token() {}
