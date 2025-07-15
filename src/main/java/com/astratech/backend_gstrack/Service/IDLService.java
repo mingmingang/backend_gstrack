@@ -26,6 +26,10 @@ public class IDLService {
 
     public List<IDL> getIDLbyIdlNpkAndIdlCreatedDate(String idlNpk, Integer year) { return idlRepository.findByNpkAndYear(idlNpk, year); }
 
+    public List<Integer> getAvailableYearsByNpk(String npk) {
+        return idlRepository.findAvailableYearsByNpk(npk);
+    }
+
     public boolean saveIDL(IDL idl) {
         IDL result = idlRepository.save(idl);
         return result != null;
