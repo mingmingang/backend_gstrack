@@ -9,15 +9,21 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @RestController
 public class CutiController {
@@ -117,22 +123,54 @@ public class CutiController {
 
 
     @GetMapping("/cuti/lampiran/{filename:.+}")
-    public ResponseEntity<org.springframework.core.io.Resource> getLampiran(@PathVariable String filename) {
+    public ResponseEntity<Resource> getLampiran(@PathVariable String filename) {
         try {
             Path filePath = Paths.get("uploads/lampiran").resolve(filename).normalize();
             Resource resource = new UrlResource(filePath.toUri());
 
-            if (!resource.exists()) {
+            if (!resource.exists() || !resource.isReadable()) {
                 return ResponseEntity.notFound().build();
             }
 
+            // Deteksi MIME type (application/pdf, image/jpeg, dll)
+            String contentType = Files.probeContentType(filePath);
+            if (contentType == null) {
+                contentType = "application/octet-stream"; // fallback
+            }
+
             return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
                     .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
                     .body(resource);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
+    @GetMapping("/cuti/size")
+    public ResponseEntity<Map<String, Long>> getFolderSizes() {
+        Map<String, Long> sizes = new HashMap<>();
 
+        sizes.put("cuti", calculateSize("uploads/lampiran"));
+        // tambahin folder lain juga
+
+        return ResponseEntity.ok(sizes);
+    }
+
+    private long calculateSize(String folderPath) {
+        try (Stream<Path> files = Files.walk(Paths.get(folderPath))) {
+            return files
+                    .filter(Files::isRegularFile)
+                    .mapToLong(p -> {
+                        try {
+                            return Files.size(p);
+                        } catch (IOException e) {
+                            return 0;
+                        }
+                    }).sum();
+        } catch (IOException e) {
+            return 0;
+        }
+    }
 }
