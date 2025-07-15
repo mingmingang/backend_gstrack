@@ -139,11 +139,9 @@ public class KaryawanController {
         try {
             Path filePath = Paths.get("uploads/karyawan").resolve(filename).normalize();
             Resource resource = new UrlResource(filePath.toUri());
-
             if (!resource.exists()) {
                 return ResponseEntity.notFound().build();
             }
-
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
                     .body(resource);
@@ -151,5 +149,4 @@ public class KaryawanController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 }

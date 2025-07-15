@@ -34,16 +34,40 @@ public class KaryawanService {
             return false;
         }
 
-        existingKaryawan.setNamaKaryawan(karyawan.getNamaKaryawan());
-        existingKaryawan.setEmail(karyawan.getEmail());
-        existingKaryawan.setDepartemen(karyawan.getDepartemen());
-        existingKaryawan.setNoHandphone(karyawan.getNoHandphone());
-        existingKaryawan.setPlant(karyawan.getPlant());
-        existingKaryawan.setStatus(karyawan.getStatus());
-        existingKaryawan.setFotoKaryawan(karyawan.getFotoKaryawan());
-        existingKaryawan.setTanggalLahir(karyawan.getTanggalLahir());
-        existingKaryawan.setModifBy(karyawan.getModifBy());
-        existingKaryawan.setModifDate(karyawan.getModifDate());
+        if (karyawan.getNamaKaryawan() != null) {
+            existingKaryawan.setNamaKaryawan(karyawan.getNamaKaryawan());
+        }
+        if (karyawan.getEmail() != null) {
+            existingKaryawan.setEmail(karyawan.getEmail());
+        }
+        if (karyawan.getDepartemen() != null) {
+            existingKaryawan.setDepartemen(karyawan.getDepartemen());
+        }
+        if (karyawan.getNoHandphone() != null) {
+            existingKaryawan.setNoHandphone(karyawan.getNoHandphone());
+        }
+        if (karyawan.getPlant() != null) {
+            existingKaryawan.setPlant(karyawan.getPlant());
+        }
+        if (karyawan.getStatus() != null) {
+            existingKaryawan.setStatus(karyawan.getStatus());
+        }
+        if (karyawan.getFotoKaryawan() != null) {
+            existingKaryawan.setFotoKaryawan(karyawan.getFotoKaryawan());
+        }
+        if (karyawan.getTanggalLahir() != null) {
+            existingKaryawan.setTanggalLahir(karyawan.getTanggalLahir());
+        }
+        if (karyawan.getAlamat() != null) {
+            existingKaryawan.setAlamat(karyawan.getAlamat());
+        }
+        if (karyawan.getModifBy() != null) {
+            existingKaryawan.setModifBy(karyawan.getModifBy());
+        }
+        if (karyawan.getModifDate() != null) {
+            existingKaryawan.setModifDate(karyawan.getModifDate());
+        }
+
 
         karyawanRepository.save(existingKaryawan);
         return true;

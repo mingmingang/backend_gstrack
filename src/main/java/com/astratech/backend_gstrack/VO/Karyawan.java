@@ -7,7 +7,6 @@ import java.util.Date;
 @Entity
 @Table(name = "tlkp_karyawan")
 public class Karyawan {
-
     @Id
     @Column(name = "kry_npk", length = 10)
     private String npk;
@@ -52,7 +51,6 @@ public class Karyawan {
     @Column(name = "kry_password")
     private String password;
 
-    // 🆕 Tambahan field baru
     @Column(name = "kry_jabatan", length = 50)
     private String jabatan;
 
@@ -65,10 +63,19 @@ public class Karyawan {
     @Transient
     private String newPassword;
 
+    @Column(name = "kry_alamat")
+    private String alamat;
 
-    public Karyawan() {}
+    @Column(name = "jumlah_plafon")
+    private String jumlah_plafon;
 
-    public Karyawan(String npk, String namaKaryawan, String fotoKaryawan, String plant, String departemen, String email, String noHandphone, Date tanggalLahir, String status, String createdBy, LocalDateTime createdDate, String modifBy, LocalDateTime modifDate, String password, String jabatan, String statusKawin, String golongan) {
+    @Column(name = "penggunaan_plafon")
+    private String penggunaan_plafon;
+
+    public Karyawan() {
+    }
+
+    public Karyawan(String npk, String namaKaryawan, String fotoKaryawan, String plant, String departemen, String email, String noHandphone, Date tanggalLahir, String status, String createdBy, LocalDateTime createdDate, String modifBy, LocalDateTime modifDate, String password, String jabatan, String statusKawin, String golongan, String newPassword, String alamat, String jumlah_plafon, String penggunaan_plafon) {
         this.npk = npk;
         this.namaKaryawan = namaKaryawan;
         this.fotoKaryawan = fotoKaryawan;
@@ -86,6 +93,18 @@ public class Karyawan {
         this.jabatan = jabatan;
         this.statusKawin = statusKawin;
         this.golongan = golongan;
+        this.newPassword = newPassword;
+        this.alamat = alamat;
+        this.jumlah_plafon = jumlah_plafon;
+        this.penggunaan_plafon = penggunaan_plafon;
+    }
+
+    public String getJabatan() {
+        return jabatan;
+    }
+
+    public void setJabatan(String jabatan) {
+        this.jabatan = jabatan;
     }
 
     public String getNpk() {
@@ -200,14 +219,6 @@ public class Karyawan {
         this.password = password;
     }
 
-    public String getJabatan() {
-        return jabatan;
-    }
-
-    public void setJabatan(String jabatan) {
-        this.jabatan = jabatan;
-    }
-
     public String getStatusKawin() {
         return statusKawin;
     }
@@ -223,6 +234,7 @@ public class Karyawan {
     public void setGolongan(String golongan) {
         this.golongan = golongan;
     }
+
     public String getNewPassword() {
         return newPassword;
     }
@@ -231,4 +243,27 @@ public class Karyawan {
         this.newPassword = newPassword;
     }
 
+    public String getAlamat() {
+        return alamat;
+    }
+
+    public void setAlamat(String alamat) {
+        this.alamat = alamat;
+    }
+
+    public String getJumlah_plafon() {
+        return jumlah_plafon;
+    }
+
+    public void setJumlah_plafon(String jumlah_plafon) {
+        this.jumlah_plafon = jumlah_plafon;
+    }
+
+    public String getPenggunaan_plafon() {
+        return penggunaan_plafon;
+    }
+
+    public void setPenggunaan_plafon(String penggunaan_plafon) {
+        this.penggunaan_plafon = penggunaan_plafon;
+    }
 }
