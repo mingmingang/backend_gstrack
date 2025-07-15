@@ -1,5 +1,6 @@
 package com.astratech.backend_gstrack.Config;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -14,6 +15,13 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
+    @PostConstruct
+    public void init()
+    {
+        System.out.println("Upload directory: "+uploadDir);
+    }
+
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // Normalisasi path direktori upload
@@ -24,6 +32,6 @@ public class WebConfig implements WebMvcConfigurer {
         // Setiap request ke URL yang dimulai dengan "/uploads/"...
         // ...harus menyajikan file dari direktori fisik di "file:/[path absolut ke direktori upload Anda]/"
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:/" + resolvedPath + "/");
+                .addResourceLocations("file:" + resolvedPath + "/");
     }
 }
