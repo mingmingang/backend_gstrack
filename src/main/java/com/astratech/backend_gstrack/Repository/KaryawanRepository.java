@@ -19,7 +19,7 @@ public interface KaryawanRepository extends JpaRepository<Karyawan, String> {
     @Query("UPDATE Karyawan k SET k.password = :newPassword WHERE k.npk = :npk")
     int updatePassword(@Param("npk") String npk, @Param("newPassword") String newPassword);
 
-    @Query("SELECT k.jumlahPlafon, k.penggunaanPlafon FROM Karyawan k WHERE k.npk = :npk")
+    @Query("SELECT k.jumlah_plafon, k.penggunaan_plafon FROM Karyawan k WHERE k.npk = :npk")
     List<Object[]> findPlafonByNpk(@Param("npk") String npk);
 
 }
