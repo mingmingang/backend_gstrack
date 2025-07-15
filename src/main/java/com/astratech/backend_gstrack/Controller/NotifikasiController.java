@@ -26,7 +26,7 @@ public class NotifikasiController {
 
     @PostMapping("/update")
     public Result update(@RequestBody Notifikasi notifikasi) {
-        return service.saveNotifkasi(notifikasi);
+        return service.updateStatusNotifkasi(notifikasi);
     }
     @PostMapping("/count")
     public Result count(@RequestBody Notifikasi notifikasi) {
