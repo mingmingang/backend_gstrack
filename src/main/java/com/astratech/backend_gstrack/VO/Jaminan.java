@@ -1,4 +1,3 @@
-//Jaminan - VO
 package com.astratech.backend_gstrack.VO;
 
 import jakarta.persistence.*;

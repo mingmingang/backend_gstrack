@@ -22,6 +22,7 @@ public interface IDLRepository extends JpaRepository<IDL, Serializable> {
         ELSE 5
       END
     """)
+
     List<IDL> findAllOrderByCustomStatusAndIdlCreatedDateDesc();
 
     List<IDL> findByIdlNpkOrderByIdlCreatedDateDesc(String idlNpk);
