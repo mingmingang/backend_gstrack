@@ -75,11 +75,11 @@ public class KehadiranService {
 
 
 
-    public Result checkOut(Kehadiran data, LocalDate tanggal, MultipartFile foto) {
+    public Result checkOut(Kehadiran data, MultipartFile foto) {
         try {
             // Cari data berdasarkan npk & tanggal
             String npk = data.getIdKaryawan();
-            Optional<Kehadiran> optional = Optional.ofNullable(kehadiranRepository.findByKryNpkAndTanggal(npk, Date.valueOf(tanggal)));
+            Optional<Kehadiran> optional = Optional.ofNullable(kehadiranRepository.findByKryNpkAndTanggal(npk));
             if (optional.isEmpty()) {
                 return new Result(404, "DATA TIDAK DITEMUKAN", null);
             }
@@ -91,6 +91,7 @@ public class KehadiranService {
             File folder = new File(folderPath);
             if (!folder.exists()) folder.mkdirs();
 
+            LocalDate tanggal = LocalDate.now();
             String tanggalStr = tanggal.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             String extension = getFileExtension(foto.getOriginalFilename());
             String fileName = npk + "_" + tanggalStr + "_OUT." + extension;
@@ -106,6 +107,10 @@ public class KehadiranService {
             kehadiran.setLatitudeKeluar(data.getLatitudeKeluar());
 
             Kehadiran updated = kehadiranRepository.save(kehadiran);
+            System.out.println("IDDDDDDDDDDDDDD: " + kehadiran.getIdAbsen());
+            System.out.println(kehadiran.getIdKaryawan());
+            System.out.println(kehadiran.getLatitudeKeluar());
+            System.out.println(kehadiran.getKeluarAbsen());
 
             return new Result(200, "SUKSES CHECKOUT", updated);
         } catch (IOException e) {
