@@ -16,10 +16,6 @@ public interface IMPRepository extends JpaRepository<IMP, Serializable> {
     List<IMP> findAllByOrderByImpIdDesc();
     List<IMP> findByImpNpkOrderByImpCreatedDateDesc(String impNpk);
 
-    @Query("SELECT DISTINCT YEAR(i.impCreatedDate) " +
-            "FROM IMP i WHERE i.impNpk = :npk ORDER BY YEAR(i.impCreatedDate) DESC")
-    List<IMP> findAvailableYearsByNpk(@Param("npk") String npk);
-
     @Query("""
     SELECT i FROM IMP i 
     WHERE FUNCTION('YEAR', i.impCreatedDate) = :year
@@ -35,17 +31,6 @@ public interface IMPRepository extends JpaRepository<IMP, Serializable> {
 
     @Query("""
     SELECT i FROM IMP i 
-    WHERE FUNCTION('YEAR', i.impCreatedDate) = :year
-    AND i.impNpk = :npk
-    ORDER BY i.impCreatedDate DESC
-""")
-    List<IMP> findByNpkAndYear(
-            @Param("npk") String npk,
-            @Param("year") Integer year
-    );
-
-    @Query("""
-    SELECT i FROM IMP i 
     WHERE i.impNpk = :npk
     AND i.impStatus = :status
     ORDER BY i.impCreatedDate DESC
@@ -53,5 +38,32 @@ public interface IMPRepository extends JpaRepository<IMP, Serializable> {
     List<IMP> findByNpkAndStatus(
             @Param("npk") String npk,
             @Param("status") String status
+    );
+
+    //ATASAN
+    @Query("SELECT DISTINCT YEAR(i.impTanggalBerangkat) FROM IMP i ORDER BY YEAR(i.impTanggalBerangkat) DESC")
+    List<Integer> findDistinctYears();
+
+    @Query("""
+    SELECT i FROM IMP i 
+    WHERE FUNCTION('YEAR', i.impCreatedDate) = :year
+    ORDER BY i.impCreatedDate DESC
+""")
+    List<IMP> findAllByYear(@Param("year")Integer year);
+
+    //KARYAWAN
+    @Query("SELECT DISTINCT FUNCTION('YEAR', i.idlCreatedDate) FROM IDL i WHERE i.idlNpk = :npk ORDER BY 1 DESC")
+    List<Integer> findAvailableYearsByNpk(@Param("npk") String npk);
+
+
+    @Query("""
+    SELECT i FROM IMP i 
+    WHERE FUNCTION('YEAR', i.impCreatedDate) = :year
+    AND i.impNpk = :npk
+    ORDER BY i.impCreatedDate DESC
+""")
+    List<IMP> findByNpkAndYear(
+            @org.springframework.data.repository.query.Param("npk") String npk,
+            @org.springframework.data.repository.query.Param("year") Integer year
     );
 }
