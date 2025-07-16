@@ -1,5 +1,6 @@
 package com.astratech.backend_gstrack.Controller;
 
+import com.astratech.backend_gstrack.Service.CutiDetailService;
 import com.astratech.backend_gstrack.Service.CutiService;
 import com.astratech.backend_gstrack.VO.Cuti;
 import com.astratech.backend_gstrack.VO.Result;
@@ -17,6 +18,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -24,6 +26,8 @@ public class CutiController {
 
     @Autowired
     private CutiService cutiService;
+    @Autowired
+    private CutiDetailService cutiDetailService;
 
     @GetMapping("/cuti")
     public List<Cuti> getAllCuti() {
@@ -51,6 +55,14 @@ public class CutiController {
         } else {
             return cutiService.getCutiByNpk(npk);
         }
+    }
+
+    @GetMapping("/cuti/atasan")
+    public List<Cuti> getFilteredCuti(
+            @RequestParam(value = "tipeCuti", required = false) String tipeCuti,
+            @RequestParam(value = "status", required = false) String status
+    ) {
+        return cutiService.getCutiByOptionalTipeCutiAndStatus(tipeCuti, status);
     }
 
     @PostMapping("/cuti")
@@ -132,6 +144,20 @@ public class CutiController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @PutMapping("/cuti/approval")
+    public ResponseEntity<?> updateCutiDanDetail(@RequestBody Map<String, String> payload) {
+        String cutiId = payload.get("cutiId");
+        String status = payload.get("status");
+
+        cutiService.updateStatusCuti(cutiId, status);
+
+        if ("Ditolak".equalsIgnoreCase(status)) {
+            cutiDetailService.updateSemuaStatusDetail(cutiId, status);
+        }
+
+        return ResponseEntity.ok(Map.of("message", "Status cuti berhasil diperbarui."));
     }
 
 
