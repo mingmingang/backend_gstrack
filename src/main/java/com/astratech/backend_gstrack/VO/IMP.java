@@ -1,5 +1,7 @@
 package com.astratech.backend_gstrack.VO;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -20,6 +22,11 @@ public class IMP {
 
     @Column(name = "imp_npk")
     private String impNpk;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="imp_npk", insertable=false, updatable=false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+    private Karyawan karyawan;
 
     @Column(name = "imp_kegiatan")
     private String impKegiatan;
@@ -63,10 +70,11 @@ public class IMP {
 
     public IMP() {}
 
-    public IMP(int impId, String impNoRequest, String impNpk, String impKegiatan, LocalDate impTanggalBerangkat, LocalTime impWaktuBerangkat, LocalDate impTanggalKembali, LocalTime impWaktuKembali, String impLokasi, String impKeterangan, String impBerkasLampiran, String impStatus, String impCreatedBy, LocalDateTime impCreatedDate, String impModifBy, LocalDateTime impModifDate) {
+    public IMP(int impId, String impNoRequest, String impNpk, Karyawan karyawan, String impKegiatan, LocalDate impTanggalBerangkat, LocalTime impWaktuBerangkat, LocalDate impTanggalKembali, LocalTime impWaktuKembali, String impLokasi, String impKeterangan, String impBerkasLampiran, String impStatus, String impCreatedBy, LocalDateTime impCreatedDate, String impModifBy, LocalDateTime impModifDate) {
         this.impId = impId;
         this.impNoRequest = impNoRequest;
         this.impNpk = impNpk;
+        this.karyawan = karyawan;
         this.impKegiatan = impKegiatan;
         this.impTanggalBerangkat = impTanggalBerangkat;
         this.impWaktuBerangkat = impWaktuBerangkat;
@@ -104,6 +112,19 @@ public class IMP {
 
     public void setImpNpk(String impNpk) {
         this.impNpk = impNpk;
+    }
+
+    public Karyawan getKaryawan() {
+        return karyawan;
+    }
+
+    public void setKaryawan(Karyawan karyawan) {
+        this.karyawan = karyawan;
+    }
+
+    @JsonProperty("namaKaryawan")
+    public String getNamaKaryawan() {
+        return karyawan!=null ? karyawan.getNamaKaryawan() : null;
     }
 
     public String getImpKegiatan() {

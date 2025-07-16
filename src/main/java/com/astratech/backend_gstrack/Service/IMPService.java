@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -31,7 +32,10 @@ public class IMPService {
 
     public List<IMP> getIMPbyImpNpkAndImpStatus(String impNpk, String impStatus) { return mIMPRepository.findByNpkAndStatus(impNpk, impStatus); }
 
-    public List<IMP> getIMPbyImpNpkAndImpCreatedDate(String impNpk, Integer year) { return mIMPRepository.findByNpkAndYear(impNpk, year); }
+//    @Transactional(readOnly = true)
+//    public List<IMP> findForAtasan(String npkAtasan) {
+//        return mIMPRepository.findForAtasan(npkAtasan);
+//    }
 
     public boolean saveIMP(IMP imp) {
         IMP result = mIMPRepository.save(imp);
@@ -101,6 +105,22 @@ public class IMPService {
         }
         mIMPRepository.delete(existingIMP);
         return true;
+    }
+
+    //ATASAN
+    public List<IMP> getIMPByYear(Integer year) {
+        return mIMPRepository.findAllByYear(year);
+    }
+
+    public List<Integer> getAllAvailableYears() {
+        return mIMPRepository.findDistinctYears();
+    }
+
+    //KARYAWAN
+    public List<IMP> getIMPbyImpNpkAndImpCreatedDate(String idlNpk, Integer year) { return mIMPRepository.findByNpkAndYear(idlNpk, year); }
+
+    public List<Integer> getAvailableYearsByNpk(String npk) {
+        return mIMPRepository.findAvailableYearsByNpk(npk);
     }
 
 }
