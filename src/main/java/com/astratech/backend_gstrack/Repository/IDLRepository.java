@@ -4,6 +4,7 @@ import com.astratech.backend_gstrack.VO.IDL;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
@@ -61,5 +62,9 @@ public interface IDLRepository extends JpaRepository<IDL, Serializable> {
             @org.springframework.data.repository.query.Param("npk") String npk,
             @org.springframework.data.repository.query.Param("status") String status
     );
+
+    @Query("SELECT DISTINCT FUNCTION('YEAR', i.idlCreatedDate) FROM IDL i WHERE i.idlNpk = :npk ORDER BY 1 DESC")
+    List<Integer> findAvailableYearsByNpk(@Param("npk") String npk);
+
 
 }
