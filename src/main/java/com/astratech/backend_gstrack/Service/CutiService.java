@@ -1,13 +1,16 @@
 package com.astratech.backend_gstrack.Service;
 
+import com.astratech.backend_gstrack.Repository.CutiDetailRepository;
 import com.astratech.backend_gstrack.Repository.CutiRepository;
 import com.astratech.backend_gstrack.VO.Cuti;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CutiService {
@@ -15,6 +18,9 @@ public class CutiService {
     @Qualifier("CutiRepository")
     @Autowired
     private CutiRepository cutiRepository;
+
+    @Autowired
+    private CutiDetailRepository cutiDetailRepository;
 
     public Cuti getCutiById(String cutiId) {
         return cutiRepository.findByCutiId(cutiId);
@@ -87,4 +93,27 @@ public class CutiService {
     public List<Cuti> getCutiByNpkAndJenisAndStatus(String npk, String tipeCuti, String status) {
         return cutiRepository.findByNpkAndTipeCutiAndStatus(npk, tipeCuti, status);
     }
+
+    public List<Cuti> getCutiByOptionalTipeCutiAndStatus(String tipeCuti, String status) {
+        return cutiRepository.findByOptionalTipeCutiAndStatus(tipeCuti, status);
+    }
+
+    @Transactional
+    public void updateStatusCuti(String cutiId, String status) {
+        Optional<Cuti> optionalCuti = cutiRepository.findById(cutiId);
+        if (optionalCuti.isPresent()) {
+            Cuti cuti = optionalCuti.get();
+            cuti.setStatus(status);
+            cutiRepository.save(cuti);
+
+            // Jika statusnya Ditolak, maka update semua tanggal cuti detail menjadi Ditolak juga
+            if ("Ditolak".equalsIgnoreCase(status)) {
+                cutiDetailRepository.updateSemuaStatusDetail(cutiId, "Ditolak");
+            }
+        } else {
+            throw new RuntimeException("Cuti tidak ditemukan");
+        }
+    }
+
+
 }
