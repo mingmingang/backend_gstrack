@@ -14,12 +14,12 @@ public class WebConfig implements WebMvcConfigurer {
     // Ambil nilai path direktori upload dari application.properties
     @Value("${file.upload-dir}")
     private String uploadDir;
-
-    @PostConstruct
-    public void init()
-    {
-        System.out.println("Upload directory: "+uploadDir);
-    }
+//
+//    @PostConstruct
+//    public void init()
+//    {
+//        System.out.println("Upload directory: "+uploadDir);
+//    }
 
 
     @Override

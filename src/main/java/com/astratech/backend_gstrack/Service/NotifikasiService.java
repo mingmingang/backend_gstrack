@@ -32,6 +32,9 @@ public class NotifikasiService {
         notifikasi.setTanggalNotif(LocalDateTime.now());
         String npk = notifikasi.getIdKaryawan();
         Token token = tokenRepositry.findByKryNpk(npk);
+        if (token == null){
+            return new Result(500,"Tidak ada token untuk pengguna ini");
+        }
         String uniqueToken = token.getToken();
         String judul = notifikasi.getJudulNotifikasi();
         String pesan = notifikasi.getPesanNotifikasi();
