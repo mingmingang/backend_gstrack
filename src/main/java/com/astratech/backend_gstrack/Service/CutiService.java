@@ -1,6 +1,6 @@
 package com.astratech.backend_gstrack.Service;
 
-import com.astratech.backend_gstrack.Repository.CutiDetailRepository;
+//import com.astratech.backend_gstrack.Repository.CutiDetailRepository;
 import com.astratech.backend_gstrack.Repository.CutiRepository;
 import com.astratech.backend_gstrack.VO.Cuti;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,8 @@ public class CutiService {
     @Autowired
     private CutiRepository cutiRepository;
 
-    @Autowired
-    private CutiDetailRepository cutiDetailRepository;
+//    @Autowired
+//    private CutiDetailRepository cutiDetailRepository;
 
     public Cuti getCutiById(String cutiId) {
         return cutiRepository.findByCutiId(cutiId);
@@ -100,20 +100,26 @@ public class CutiService {
 
     @Transactional
     public void updateStatusCuti(String cutiId, String status) {
-        Optional<Cuti> optionalCuti = cutiRepository.findById(cutiId);
-        if (optionalCuti.isPresent()) {
-            Cuti cuti = optionalCuti.get();
-            cuti.setStatus(status);
-            cutiRepository.save(cuti);
-
-            // Jika statusnya Ditolak, maka update semua tanggal cuti detail menjadi Ditolak juga
-            if ("Ditolak".equalsIgnoreCase(status)) {
-                cutiDetailRepository.updateSemuaStatusDetail(cutiId, "Ditolak");
-            }
-        } else {
-            throw new RuntimeException("Cuti tidak ditemukan");
-        }
+        cutiRepository.updateStatusById(cutiId, status);
     }
+
+
+//    @Transactional
+//    public void updateStatusCuti(String cutiId, String status) {
+//        Optional<Cuti> optionalCuti = cutiRepository.findById(cutiId);
+//        if (optionalCuti.isPresent()) {
+//            Cuti cuti = optionalCuti.get();
+//            cuti.setStatus(status);
+//            cutiRepository.save(cuti);
+//
+//            // Jika statusnya Ditolak, maka update semua tanggal cuti detail menjadi Ditolak juga
+//            if ("Ditolak".equalsIgnoreCase(status)) {
+//                cutiDetailRepository.updateSemuaStatusDetail(cutiId, "Ditolak");
+//            }
+//        } else {
+//            throw new RuntimeException("Cuti tidak ditemukan");
+//        }
+//    }
 
 
 }

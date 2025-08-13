@@ -7,6 +7,7 @@ public class DateRange {
     private Date startDate;
     private Date endDate;
 
+
     public DateRange()
     {}
 

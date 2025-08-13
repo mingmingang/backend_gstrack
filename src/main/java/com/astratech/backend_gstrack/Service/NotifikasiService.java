@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,12 +28,8 @@ public class NotifikasiService {
     }
     public Result saveNotifkasi(Notifikasi notifikasi) {
         notifikasi.setStatusDibaca(0);
-        notifikasi.setTanggalNotif(LocalDateTime.now());
         String npk = notifikasi.getIdKaryawan();
         Token token = tokenRepositry.findByKryNpk(npk);
-        if (token == null){
-            return new Result(500,"Tidak ada token untuk pengguna ini");
-        }
         String uniqueToken = token.getToken();
         String judul = notifikasi.getJudulNotifikasi();
         String pesan = notifikasi.getPesanNotifikasi();
@@ -68,8 +63,8 @@ public class NotifikasiService {
     }
 
     public Result updateStatusNotifkasi(Notifikasi notifikasi) {
-        Integer notif = notifikasi.getIdNotif();
-        Notifikasi data = notifikasiRepository.findById(notif).get();
+        String npk = notifikasi.getIdKaryawan();
+        Notifikasi data = notifikasiRepository.findByNPK(npk);
         data.setStatusDibaca(1);
         return new Result(200,"SUKSES",notifikasiRepository.save(data));
     }

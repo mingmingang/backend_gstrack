@@ -23,6 +23,9 @@ public interface CutiRepository extends JpaRepository<Cuti, Serializable> {
     List<Cuti> findByNpkAndTipeCutiAndStatus(String npk, String tipeCuti, String status);
 
     List<Cuti> findByNpkAndTipeCuti(String npk, String tipeCuti);
+    @Modifying
+    @Query("UPDATE Cuti c SET c.status = :status WHERE c.cutiId = :cutiId")
+    void updateStatusById(@Param("cutiId") String cutiId, @Param("status") String status);
 
     List<Cuti> findByNpkAndStatus(String npk, String status);
     @Query("SELECT c FROM Cuti c WHERE " +

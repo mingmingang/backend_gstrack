@@ -7,7 +7,6 @@ import java.util.Date;
 @Entity
 @Table(name = "tlkp_karyawan")
 public class Karyawan {
-
     @Id
     @Column(name = "kry_npk", length = 10)
     private String npk;

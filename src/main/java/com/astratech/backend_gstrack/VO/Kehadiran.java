@@ -39,6 +39,11 @@ public class Kehadiran {
 
     @Column(name = "foto_keluar")
     private String fotoKeluar;
+
+    // 👇 Join ke Karyawan
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "kry_npk", referencedColumnName = "kry_npk", insertable = false, updatable = false)
+    private Karyawan karyawan;
     public Kehadiran()
     {}
 
@@ -136,6 +141,14 @@ public class Kehadiran {
 
     public void setFotoKeluar(String fotoKeluar) {
         this.fotoKeluar = fotoKeluar;
+    }
+
+    public Karyawan getKaryawan() {
+        return karyawan;
+    }
+
+    public void setKaryawan(Karyawan karyawan) {
+        this.karyawan = karyawan;
     }
 
     public Kehadiran(Integer idAbsen, String idKaryawan, Date tanggalMasuk, LocalDateTime masukAbsen, LocalDateTime keluarAbsen, Integer indikatorKehadiran, Double longitudeMasuk, Double latitudeMasuk, Double longitudeKeluar, Double latitudeKeluar, String fotoMasuk, String fotoKeluar) {

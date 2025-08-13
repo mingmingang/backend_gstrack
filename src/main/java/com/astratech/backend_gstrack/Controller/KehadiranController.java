@@ -22,10 +22,12 @@ public class KehadiranController {
     {
         this.kehadiranService = kehadiranService;
     }
+
     @PostMapping("/get")
     public Result getKehadiran(@RequestBody DateRange range){
-        return kehadiranService.getKehadiran(range.getStartDate(),range.getEndDate());
+        return kehadiranService.getKehadiran(range.getStartDate(),range.getEndDate(), range.getNpk());
     }
+
     @PostMapping( value = "/checkin", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Result checkin(@RequestPart("data") String data, @RequestPart("foto") MultipartFile foto) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -35,10 +37,10 @@ public class KehadiranController {
     }
 
     @PostMapping(value = "/checkout", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Result checkout(@RequestParam("foto") MultipartFile foto, @RequestParam("data") String data, @RequestParam("tanggal") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate tanggal) throws JsonProcessingException {
+    public Result checkout(@RequestParam("foto") MultipartFile foto, @RequestParam("data") String data) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Kehadiran kehadiran = mapper.readValue(data, Kehadiran.class);
-        return kehadiranService.checkOut(kehadiran, tanggal, foto);
+        return kehadiranService.checkOut(kehadiran, foto);
     }
 
     @PostMapping("/currenthadir")

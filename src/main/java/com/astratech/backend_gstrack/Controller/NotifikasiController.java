@@ -13,20 +13,17 @@ public class NotifikasiController {
     public NotifikasiController(NotifikasiService service) {
         this.service = service;
     }
-
     @PostMapping("/getAll")
     public Result getAll(@RequestBody Notifikasi notifikasi) {
         return service.getNotifikasi(notifikasi);
     }
-
     @PostMapping("/save")
     public Result save(@RequestBody Notifikasi notifikasi) {
         return service.saveNotifkasi(notifikasi);
     }
-
     @PostMapping("/update")
     public Result update(@RequestBody Notifikasi notifikasi) {
-        return service.updateStatusNotifkasi(notifikasi);
+        return service.saveNotifkasi(notifikasi);
     }
     @PostMapping("/count")
     public Result count(@RequestBody Notifikasi notifikasi) {
