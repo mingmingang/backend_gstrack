@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "gs_track_psk")
-public class PSK {
+public class PeSeKet {
     @Id
     @Column(name = "psk_id")
     private String id;
@@ -28,7 +28,7 @@ public class PSK {
     private LocalDateTime modifiedDate;
     @Column(name = "psk_modi_by")
     private String modifiedBy;
-    public PSK() {
+    public PeSeKet() {
     }
     @Transient
     private String kryNamaKaryawan;
@@ -40,7 +40,7 @@ public class PSK {
         this.kryNamaKaryawan = kryNamaKaryawan;
     }
 
-    public PSK(String id, String kryNpk, String ap, String keterangan, String status, LocalDateTime createdDate, String createdBy, LocalDateTime modifiedDate, String modifiedBy) {
+    public PeSeKet(String id, String kryNpk, String ap, String keterangan, String status, LocalDateTime createdDate, String createdBy, LocalDateTime modifiedDate, String modifiedBy) {
         this.id = id;
         this.kryNpk = kryNpk;
         this.ap = ap;

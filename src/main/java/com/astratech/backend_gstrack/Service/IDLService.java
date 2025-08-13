@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class IDLService {
@@ -30,9 +31,33 @@ public class IDLService {
         return idlRepository.findAvailableYearsByNpk(npk);
     }
 
+    public List<IDL> getIDLByYear(Integer year) {
+        return idlRepository.findAllByYear(year);
+    }
+
     public boolean saveIDL(IDL idl) {
         IDL result = idlRepository.save(idl);
         return result != null;
+    }
+
+    public List<Integer> getAllAvailableYears() {
+        return idlRepository.findDistinctYears();
+    }
+
+    public Optional<IDL> getLatestIdl() {
+        return idlRepository.findLatestIdl();
+    }
+
+    public Optional<IDL> getLatestIdlByNpk(String npk) {
+        return idlRepository.findLatestIdlByNpk(npk);
+    }
+
+    public Optional<IDL> getLatestIdlByStatus(String status) {
+        return idlRepository.findLatestIdlByStatus(status);
+    }
+
+    public Optional<IDL> getLatestIdlByNpkAndStatus(String npk, String status) {
+        return idlRepository.findLatestIdlByNpkAndStatus(npk, status);
     }
 
 }

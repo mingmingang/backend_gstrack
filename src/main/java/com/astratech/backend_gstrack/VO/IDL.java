@@ -52,6 +52,9 @@ public class IDL {
     @Column(name = "idl_berkas_lampiran", columnDefinition = "varchar(max)")
     private String idlBerkasLampiran;
 
+    @Column(name = "idl_berkas_lampiran_name")
+    private String idlBerkasLampiranName;
+
     @Column(name = "idl_status", length = 20)
     private String idlStatus;
 
@@ -76,7 +79,7 @@ public class IDL {
     public IDL() {
     }
 
-    public IDL(Integer idlId, String idlNoRequest, String idlNpk, String idlJenisKegiatan, LocalDate idlTanggalBerangkat, LocalTime idlWaktuBerangkat, LocalDate idlTanggalKembali, LocalTime idlWaktuKembali, String idlLokasiPertama, String idlLokasiKedua, String idlLokasiKetiga, String idlKeterangan, String idlBerkasLampiran, String idlStatus, LocalDateTime idlBerangkat, LocalDateTime idlPulang, String idlCreatedBy, LocalDateTime idlCreatedDate, String idlModifBy, LocalDateTime idlModifDate) {
+    public IDL(Integer idlId, String idlNoRequest, String idlNpk, String idlJenisKegiatan, LocalDate idlTanggalBerangkat, LocalTime idlWaktuBerangkat, LocalDate idlTanggalKembali, LocalTime idlWaktuKembali, String idlLokasiPertama, String idlLokasiKedua, String idlLokasiKetiga, String idlKeterangan, String idlBerkasLampiran, String idlBerkasLampiranName, String idlStatus, LocalDateTime idlBerangkat, LocalDateTime idlPulang, String idlCreatedBy, LocalDateTime idlCreatedDate, String idlModifBy, LocalDateTime idlModifDate) {
         this.idlId = idlId;
         this.idlNoRequest = idlNoRequest;
         this.idlNpk = idlNpk;
@@ -90,6 +93,7 @@ public class IDL {
         this.idlLokasiKetiga = idlLokasiKetiga;
         this.idlKeterangan = idlKeterangan;
         this.idlBerkasLampiran = idlBerkasLampiran;
+        this.idlBerkasLampiranName = idlBerkasLampiranName;
         this.idlStatus = idlStatus;
         this.idlBerangkat = idlBerangkat;
         this.idlPulang = idlPulang;
@@ -201,6 +205,14 @@ public class IDL {
 
     public void setIdlBerkasLampiran(String idlBerkasLampiran) {
         this.idlBerkasLampiran = idlBerkasLampiran;
+    }
+
+    public String getIdlBerkasLampiranName() {
+        return idlBerkasLampiranName;
+    }
+
+    public void setIdlBerkasLampiranName(String idlBerkasLampiranName) {
+        this.idlBerkasLampiranName = idlBerkasLampiranName;
     }
 
     public String getIdlStatus() {

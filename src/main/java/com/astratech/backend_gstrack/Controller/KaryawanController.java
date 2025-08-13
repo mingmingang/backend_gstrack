@@ -1,5 +1,6 @@
 package com.astratech.backend_gstrack.Controller;
 
+import com.astratech.backend_gstrack.Service.JaminanService;
 import com.astratech.backend_gstrack.Service.KaryawanService;
 import com.astratech.backend_gstrack.VO.Karyawan;
 import com.astratech.backend_gstrack.VO.Result;
@@ -23,6 +24,9 @@ public class KaryawanController {
 
     @Autowired
     private KaryawanService karyawanService;
+
+    @Autowired
+    private JaminanService jaminanService;
 
     @GetMapping("/karyawan")
     public List<Karyawan> getAllKaryawan() {
@@ -70,8 +74,6 @@ public class KaryawanController {
     @PostMapping("/karyawan/login")
     public Object login(HttpServletResponse response, @RequestBody Karyawan loginRequest) {
         Karyawan karyawan = karyawanService.getKaryawanByNpk(loginRequest.getNpk());
-//        System.out.println(loginRequest.getNpk());
-//        System.out.println(karyawan);
         if (karyawan != null && karyawan.getPassword().equals(loginRequest.getPassword())) {
             return new Result(200, "Login Successful", karyawan);
         } else {
@@ -139,9 +141,11 @@ public class KaryawanController {
         try {
             Path filePath = Paths.get("uploads/karyawan").resolve(filename).normalize();
             Resource resource = new UrlResource(filePath.toUri());
+
             if (!resource.exists()) {
                 return ResponseEntity.notFound().build();
             }
+
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
                     .body(resource);
@@ -149,4 +153,10 @@ public class KaryawanController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+/*    @GetMapping("/karyawan/plafon")
+    public Integer[] getPlafonByNpk(@RequestParam("npk") String npk) {
+        return jaminanService.getPlafonByNpk(npk);
+    }*/
+
 }

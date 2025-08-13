@@ -22,4 +22,17 @@ public interface OrangRepository extends JpaRepository<Orang, Integer> {
 //    List<Orang> findOrangByNpk(@Param("npk") String npk);
 
     List<Orang> findByKryNpk(String kryNpk);
+
+    @Query("SELECT o.orgId, o.orgNama, o.orgHubungan " +
+            "FROM Orang o " +
+            "WHERE o.kryNpk = :npk " +
+            "ORDER BY CASE " +
+            "           WHEN LOWER(o.orgHubungan) LIKE '%diri sendiri%' THEN 1 " +
+            "           WHEN LOWER(o.orgHubungan) LIKE '%anak%' THEN 2 " +
+            "           WHEN LOWER(o.orgHubungan) LIKE '%istri%' OR LOWER(o.orgHubungan) LIKE '%suami%' THEN 3 " +
+            "           WHEN LOWER(o.orgHubungan) LIKE '%ibu%' OR LOWER(o.orgHubungan) LIKE '%bapak%' THEN 4 " +
+            "           ELSE 4 " +
+            "         END")
+    List<Object[]> findNamaHubunganByKryNpkOrdered(@Param("npk") String npk);
+
 }

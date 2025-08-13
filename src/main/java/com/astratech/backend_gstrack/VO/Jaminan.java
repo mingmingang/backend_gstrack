@@ -1,8 +1,11 @@
 package com.astratech.backend_gstrack.VO;
 
+import com.astratech.backend_gstrack.VO.DataBantuan.Orang;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -28,8 +31,9 @@ public class Jaminan {
     @Column(name = "psj_departemen")
     private String psjDepartemen;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "psj_tanggal_periksa")
-    private LocalDateTime psjTanggalPeriksa;
+    private LocalDate psjTanggalPeriksa;
 
     @Column(name = "rs_id")
     private Integer rsId;
@@ -38,7 +42,7 @@ public class Jaminan {
     private String psjTipeJaminan;
 
     @Column(name = "org_id")
-    private Integer org_id;
+    private BigInteger orgId;
 
     @Column(name = "psj_keterangan")
     private String psjKeterangan;
@@ -62,26 +66,27 @@ public class Jaminan {
     @Column(name = "psj_alasan_penolakan")
     private String psjAlasanPenolakan;
 
-    public Jaminan() {
-    }
+    @Transient
+    private String orgNama;
 
-    public Jaminan(Integer psjId, String psjNoRequestRecord, String kryNpk, String psjPlant, String psjDepartemen, LocalDateTime psjTanggalPeriksa, Integer rsId, String psjTipeJaminan, Integer org_id, String psjKeterangan, String psjStatus, String psjCreatedBy, LocalDateTime psjCreatedDate, String psjModifBy, LocalDateTime psjModifDate, String psjAlasanPenolakan) {
-        this.psjId = psjId;
-        this.psjNoRequestRecord = psjNoRequestRecord;
-        this.kryNpk = kryNpk;
-        this.psjPlant = psjPlant;
-        this.psjDepartemen = psjDepartemen;
-        this.psjTanggalPeriksa = psjTanggalPeriksa;
-        this.rsId = rsId;
-        this.psjTipeJaminan = psjTipeJaminan;
-        this.org_id = org_id;
-        this.psjKeterangan = psjKeterangan;
-        this.psjStatus = psjStatus;
-        this.psjCreatedBy = psjCreatedBy;
-        this.psjCreatedDate = psjCreatedDate;
-        this.psjModifBy = psjModifBy;
-        this.psjModifDate = psjModifDate;
-        this.psjAlasanPenolakan = psjAlasanPenolakan;
+    @Transient
+    private String orgHubungan;
+
+    @Transient
+    private String namaKaryawan;
+
+    @Transient
+    private Integer jumlahPlafon;
+
+    @Transient
+    private Integer penggunaanPlafon;
+
+
+    @Transient
+    private String rsNama;
+
+
+    public Jaminan() {
     }
 
     public Integer getPsjId() {
@@ -124,11 +129,11 @@ public class Jaminan {
         this.psjDepartemen = psjDepartemen;
     }
 
-    public LocalDateTime getPsjTanggalPeriksa() {
+    public LocalDate getPsjTanggalPeriksa() {
         return psjTanggalPeriksa;
     }
 
-    public void setPsjTanggalPeriksa(LocalDateTime psjTanggalPeriksa) {
+    public void setPsjTanggalPeriksa(LocalDate psjTanggalPeriksa) {
         this.psjTanggalPeriksa = psjTanggalPeriksa;
     }
 
@@ -148,12 +153,12 @@ public class Jaminan {
         this.psjTipeJaminan = psjTipeJaminan;
     }
 
-    public Integer getOrg_id() {
-        return org_id;
+    public BigInteger getOrgId() {
+        return orgId;
     }
 
-    public void setOrg_id(Integer org_id) {
-        this.org_id = org_id;
+    public void setOrgId(BigInteger orgId) {
+        this.orgId = orgId;
     }
 
     public String getPsjKeterangan() {

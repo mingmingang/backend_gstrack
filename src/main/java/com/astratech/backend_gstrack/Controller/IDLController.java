@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -24,6 +25,12 @@ public class IDLController {
     @GetMapping("/IDL/available-years")
     public ResponseEntity<List<Integer>> getAvailableYears(@RequestParam String idlNpk) {
         List<Integer> years = idlService.getAvailableYearsByNpk(idlNpk); // hasilnya harus List<Integer>
+        return ResponseEntity.ok(years);
+    }
+
+    @GetMapping("/IDL/available-years-all")
+    public ResponseEntity<List<Integer>> getAllAvailableYears() {
+        List<Integer> years = idlService.getAllAvailableYears();
         return ResponseEntity.ok(years);
     }
 
@@ -47,6 +54,14 @@ public class IDLController {
         }
     }
 
+    @GetMapping("/IDL/year")
+    public List<IDL> getIDLByYear(@RequestParam(value = "year", required = false) Integer year) {
+        if (year == null) {
+            // Misalnya default ke tahun sekarang
+            year = java.time.Year.now().getValue();
+        }
+        return idlService.getIDLByYear(year);
+    }
 
     @PostMapping("/IDL")
     public Object saveIDL(HttpServletResponse response, @RequestBody IDL idl) {
@@ -58,4 +73,69 @@ public class IDLController {
             return new Result(500, "Gagal menyimpan IDL");
         }
     }
+
+    @PutMapping("/updateIDL")
+    public Object updateIDL(HttpServletResponse response, @RequestBody IDL idl) {
+        IDL existingIDL = idlService.getIDLbyIdlNoRequest(idl.getIdlNoRequest());
+
+        if (existingIDL == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return new Result(404, "Data IDL tidak ditemukan");
+        }
+
+        // Update field-field yang bisa dimodifikasi
+        existingIDL.setIdlJenisKegiatan(idl.getIdlJenisKegiatan());
+        existingIDL.setIdlTanggalBerangkat(idl.getIdlTanggalBerangkat());
+        existingIDL.setIdlWaktuBerangkat(idl.getIdlWaktuBerangkat());
+        existingIDL.setIdlTanggalKembali(idl.getIdlTanggalKembali());
+        existingIDL.setIdlWaktuKembali(idl.getIdlWaktuKembali());
+        existingIDL.setIdlLokasiPertama(idl.getIdlLokasiPertama());
+        existingIDL.setIdlLokasiKedua(idl.getIdlLokasiKedua());
+        existingIDL.setIdlLokasiKetiga(idl.getIdlLokasiKetiga());
+        existingIDL.setIdlKeterangan(idl.getIdlKeterangan());
+        existingIDL.setIdlBerkasLampiran(idl.getIdlBerkasLampiran());
+        existingIDL.setIdlBerkasLampiranName(idl.getIdlBerkasLampiranName());
+        existingIDL.setIdlStatus(idl.getIdlStatus());
+
+        // Set modif info
+        existingIDL.setIdlModifBy(idl.getIdlModifBy());
+        existingIDL.setIdlModifDate(java.time.LocalDateTime.now());
+
+        boolean isSuccess = idlService.saveIDL(existingIDL);
+        if (isSuccess) {
+            return new Result(200, "IDL berhasil diperbarui");
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return new Result(500, "Gagal memperbarui IDL");
+        }
+    }
+
+    @PutMapping("/IDL/berangkat")
+    public ResponseEntity<?> updateBerangkat(@RequestParam String idlNoRequest) {
+        IDL idl = idlService.getIDLbyIdlNoRequest(idlNoRequest);
+        if (idl == null) {
+            return ResponseEntity.notFound().build();
+        }
+        idl.setIdlBerangkat(LocalDateTime.now());
+        idlService.saveIDL(idl);
+        return ResponseEntity.ok("Berangkat time updated");
+    }
+
+
+    @PutMapping("/IDL/pulang")
+    public ResponseEntity<?> updatePulang(@RequestParam String idlNoRequest) {
+        IDL idl = idlService.getIDLbyIdlNoRequest(idlNoRequest);
+        if (idl == null) {
+            return ResponseEntity.notFound().build();
+        }
+        idl.setIdlPulang(LocalDateTime.now());
+        idlService.saveIDL(idl);
+        return ResponseEntity.ok("Pulang time updated");
+    }
+
+    @GetMapping("/IDL/latest/karyawan")
+    public IDL getLatestIdlByKaryawan(@RequestParam("idlNpk") String idlNpk) {
+        return idlService.getLatestIdlByNpk(idlNpk).orElse(null);
+    }
+
 }

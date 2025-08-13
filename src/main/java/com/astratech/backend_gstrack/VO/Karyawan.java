@@ -67,15 +67,15 @@ public class Karyawan {
     private String alamat;
 
     @Column(name = "jumlah_plafon")
-    private String jumlah_plafon;
+    private Integer jumlah_plafon;
 
     @Column(name = "penggunaan_plafon")
-    private String penggunaan_plafon;
+    private Integer penggunaan_plafon;
 
     public Karyawan() {
     }
 
-    public Karyawan(String npk, String namaKaryawan, String fotoKaryawan, String plant, String departemen, String email, String noHandphone, Date tanggalLahir, String status, String createdBy, LocalDateTime createdDate, String modifBy, LocalDateTime modifDate, String password, String jabatan, String statusKawin, String golongan, String newPassword, String alamat, String jumlah_plafon, String penggunaan_plafon) {
+    public Karyawan(String npk, String namaKaryawan, String fotoKaryawan, String plant, String departemen, String email, String noHandphone, Date tanggalLahir, String status, String createdBy, LocalDateTime createdDate, String modifBy, LocalDateTime modifDate, String password, String jabatan, String statusKawin, String golongan, String newPassword, String alamat, Integer jumlah_plafon, Integer penggunaan_plafon) {
         this.npk = npk;
         this.namaKaryawan = namaKaryawan;
         this.fotoKaryawan = fotoKaryawan;
@@ -251,19 +251,19 @@ public class Karyawan {
         this.alamat = alamat;
     }
 
-    public String getJumlah_plafon() {
+    public Integer getJumlah_plafon() {
         return jumlah_plafon;
     }
 
-    public void setJumlah_plafon(String jumlah_plafon) {
+    public void setJumlah_plafon(Integer jumlah_plafon) {
         this.jumlah_plafon = jumlah_plafon;
     }
 
-    public String getPenggunaan_plafon() {
+    public Integer getPenggunaan_plafon() {
         return penggunaan_plafon;
     }
 
-    public void setPenggunaan_plafon(String penggunaan_plafon) {
+    public void setPenggunaan_plafon(Integer penggunaan_plafon) {
         this.penggunaan_plafon = penggunaan_plafon;
     }
 }
