@@ -15,10 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -171,6 +168,7 @@ public class ReimbursementController {
      * @param fileKey Kunci file yang diminta (cth: kwitansi, rincian_obat, hasil_lab, resume_medis)
      * @return Data file dalam bentuk byte array dengan Content-Type yang sesuai.
      */
+    // ==== GET FILE ====
     @GetMapping("/file/{id}/{fileKey}")
     public ResponseEntity<byte[]> getReimbursementFile(
             @PathVariable("id") BigInteger id,
@@ -180,67 +178,55 @@ public class ReimbursementController {
             Reimbursement reimbursement = reimbursementRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Reimbursement not found with id: " + id));
 
-            byte[] fileData;
-
-            // Switch tetap sama
+            String fileBase64;
             switch (fileKey.toLowerCase()) {
                 case "kwitansi":
-                    fileData = reimbursement.getRbmFilePathKwitansi();
+                    fileBase64 = reimbursement.getRbmFilePathKwitansi();
                     break;
                 case "rincian_obat":
-                    fileData = reimbursement.getRbmFilePathRincianObat();
+                    fileBase64 = reimbursement.getRbmFilePathRincianObat();
                     break;
                 case "hasil_lab":
-                    fileData = reimbursement.getRbmFilePathHasilLab();
+                    fileBase64 = reimbursement.getRbmFilePathHasilLab();
                     break;
                 case "resume_medis":
-                    fileData = reimbursement.getRbmFilePathResumeMedis();
+                    fileBase64 = reimbursement.getRbmFilePathResumeMedis();
                     break;
                 default:
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
 
-            if (fileData == null || fileData.length == 0) {
+            if (fileBase64 == null || fileBase64.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
 
-            // --- PERBAIKAN UTAMA ADA DI SINI ---
+            byte[] fileData = Base64.getDecoder().decode(fileBase64);
+
             HttpHeaders headers = new HttpHeaders();
             String filename;
 
-            // Cek "Magic Numbers" untuk menentukan tipe file
-            // %PDF-
+            // Deteksi tipe file
             if (fileData.length > 4 && fileData[0] == 0x25 && fileData[1] == 0x50 && fileData[2] == 0x44 && fileData[3] == 0x46) {
                 headers.setContentType(MediaType.APPLICATION_PDF);
                 filename = fileKey + ".pdf";
-                // JFIF (JPEG) atau Exif
-            } else if (fileData.length > 10 && (
-                    (fileData[6] == 'J' && fileData[7] == 'F' && fileData[8] == 'I' && fileData[9] == 'F') ||
-                            (fileData[6] == 'E' && fileData[7] == 'x' && fileData[8] == 'i' && fileData[9] == 'f')
-            )) {
+            } else if (fileData.length > 10 && ((fileData[6] == 'J' && fileData[7] == 'F' && fileData[8] == 'I' && fileData[9] == 'F') ||
+                    (fileData[6] == 'E' && fileData[7] == 'x' && fileData[8] == 'i' && fileData[9] == 'f'))) {
                 headers.setContentType(MediaType.IMAGE_JPEG);
                 filename = fileKey + ".jpg";
-                // PNG
             } else if (fileData.length > 8 && fileData[1] == 'P' && fileData[2] == 'N' && fileData[3] == 'G') {
                 headers.setContentType(MediaType.IMAGE_PNG);
                 filename = fileKey + ".png";
             } else {
-                // Fallback jika tidak terdeteksi, atau asumsikan JPEG
-                headers.setContentType(MediaType.IMAGE_JPEG);
-                filename = fileKey + ".jpg";
+                headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+                filename = fileKey + ".bin";
             }
 
-            // PERBAIKAN: Gunakan ContentDisposition.builder untuk mengatur header yang benar.
-            // "inline" mencoba menampilkan file di browser.
-            // "attachment" akan langsung memicu unduhan. "inline" lebih cocok untuk kasus Anda.
             headers.setContentDisposition(ContentDisposition.builder("inline").filename(filename).build());
-
             return new ResponseEntity<>(fileData, headers, HttpStatus.OK);
 
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
-            // Logging error sangat penting untuk debugging
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }

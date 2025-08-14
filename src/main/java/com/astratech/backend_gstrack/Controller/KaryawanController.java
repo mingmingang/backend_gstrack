@@ -18,8 +18,11 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*")
+@RequestMapping("/karyawan") // Menetapkan prefix /api/karyawan untuk semua endpoint di kelas ini
 public class KaryawanController {
 
     @Autowired
@@ -154,9 +157,28 @@ public class KaryawanController {
         }
     }
 
-/*    @GetMapping("/karyawan/plafon")
+    /*    @GetMapping("/karyawan/plafon")
     public Integer[] getPlafonByNpk(@RequestParam("npk") String npk) {
         return jaminanService.getPlafonByNpk(npk);
     }*/
+    @GetMapping("/{npk}/keluarga")
+    public ResponseEntity<?> getKaryawanWithKeluarga(@PathVariable("npk") String npk) {
+        try {
+            // Memanggil method baru di KaryawanService yang perlu Anda buat
+            Map<String, Object> userData = karyawanService.getUserDataWithFamily(npk);
 
+            // Jika service tidak menemukan karyawan, kembalikan 404 Not Found
+            if (userData == null || userData.isEmpty()) {
+                return ResponseEntity.status(404).body(Map.of("message", "Karyawan atau data keluarga tidak ditemukan."));
+            }
+
+            // Jika berhasil, kembalikan data dengan status 200 OK
+            return ResponseEntity.ok(userData);
+
+        } catch (Exception e) {
+            // Jika terjadi error tak terduga di service, kembalikan 500 Internal Server Error
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(Map.of("message", "Internal Server Error: " + e.getMessage()));
+        }
+    }
 }

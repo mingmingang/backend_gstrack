@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -84,7 +85,14 @@ public class JaminanController {
 
             boolean isSuccess = jaminanService.saveJaminan(jaminan);
             if (isSuccess) {
-                return new Result(200, "Jaminan berhasil disimpan");
+                // Return response with noRequest included
+                Map<String, Object> responseData = new HashMap<>();
+                responseData.put("status", 200);
+                responseData.put("message", "Jaminan berhasil disimpan");
+                responseData.put("noRequest", noRequest);
+                responseData.put("psjNoRequest", noRequest); // Alternative field name
+
+                return responseData;
             } else {
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 return new Result(500, "Gagal menyimpan Jaminan");

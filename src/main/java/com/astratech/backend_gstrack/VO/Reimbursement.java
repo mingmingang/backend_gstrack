@@ -64,19 +64,19 @@ public class Reimbursement {
 
     @Lob
     @Column(name = "rbm_file_path_kwitansi")
-    private byte[] rbmFilePathKwitansi;
+    private String rbmFilePathKwitansi;
 
     @Lob
     @Column(name = "rbm_file_path_rincian_obat")
-    private byte[] rbmFilePathRincianObat;
+    private String rbmFilePathRincianObat;
 
     @Lob
     @Column(name = "rbm_file_path_hasil_lab")
-    private byte[] rbmFilePathHasilLab;
+    private String rbmFilePathHasilLab;
 
     @Lob
     @Column(name = "rbm_file_path_resume_medis")
-    private byte[] rbmFilePathResumeMedis;
+    private String rbmFilePathResumeMedis;
 
     @Column(name = "rbm_status_submit")
     private String rbmStatusSubmit;
@@ -99,7 +99,7 @@ public class Reimbursement {
     public Reimbursement() {
     }
 
-    public Reimbursement(BigInteger rbmId, String kryNpk, Karyawan karyawan, BigInteger orgId, Orang orang, String rbmTipe, Date rbmTanggalMulai, Date rbmTanggalSelesai, BigDecimal rbmCost, String dgsId, Diagnosa diagnosa, String rbmDiagnosaOther, Integer rsId, RumahSakit rumahSakit, String rbmDokter, byte[] rbmFilePathKwitansi, byte[] rbmFilePathRincianObat, byte[] rbmFilePathHasilLab, byte[] rbmFilePathResumeMedis, String rbmStatusSubmit, String rbmCreatedBy, Date rbmCreatedDate, String rbmModifyBy, Date rbmModifyDate, String rbmAlasanPembatalan) {
+    public Reimbursement(BigInteger rbmId, String kryNpk, Karyawan karyawan, BigInteger orgId, Orang orang, String rbmTipe, Date rbmTanggalMulai, Date rbmTanggalSelesai, BigDecimal rbmCost, String dgsId, Diagnosa diagnosa, String rbmDiagnosaOther, Integer rsId, RumahSakit rumahSakit, String rbmDokter, String rbmFilePathKwitansi, String rbmFilePathRincianObat, String rbmFilePathHasilLab, String rbmFilePathResumeMedis, String rbmStatusSubmit, String rbmCreatedBy, Date rbmCreatedDate, String rbmModifyBy, Date rbmModifyDate, String rbmAlasanPembatalan) {
         this.rbmId = rbmId;
         this.kryNpk = kryNpk;
         this.karyawan = karyawan;
@@ -247,35 +247,35 @@ public class Reimbursement {
         this.rbmDokter = rbmDokter;
     }
 
-    public byte[] getRbmFilePathKwitansi() {
+    public String getRbmFilePathKwitansi() {
         return rbmFilePathKwitansi;
     }
 
-    public void setRbmFilePathKwitansi(byte[] rbmFilePathKwitansi) {
+    public void setRbmFilePathKwitansi(String rbmFilePathKwitansi) {
         this.rbmFilePathKwitansi = rbmFilePathKwitansi;
     }
 
-    public byte[] getRbmFilePathRincianObat() {
+    public String getRbmFilePathRincianObat() {
         return rbmFilePathRincianObat;
     }
 
-    public void setRbmFilePathRincianObat(byte[] rbmFilePathRincianObat) {
+    public void setRbmFilePathRincianObat(String rbmFilePathRincianObat) {
         this.rbmFilePathRincianObat = rbmFilePathRincianObat;
     }
 
-    public byte[] getRbmFilePathHasilLab() {
+    public String getRbmFilePathHasilLab() {
         return rbmFilePathHasilLab;
     }
 
-    public void setRbmFilePathHasilLab(byte[] rbmFilePathHasilLab) {
+    public void setRbmFilePathHasilLab(String rbmFilePathHasilLab) {
         this.rbmFilePathHasilLab = rbmFilePathHasilLab;
     }
 
-    public byte[] getRbmFilePathResumeMedis() {
+    public String getRbmFilePathResumeMedis() {
         return rbmFilePathResumeMedis;
     }
 
-    public void setRbmFilePathResumeMedis(byte[] rbmFilePathResumeMedis) {
+    public void setRbmFilePathResumeMedis(String rbmFilePathResumeMedis) {
         this.rbmFilePathResumeMedis = rbmFilePathResumeMedis;
     }
 

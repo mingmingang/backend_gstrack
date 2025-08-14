@@ -114,8 +114,8 @@ public class IMPController {
 
     //KARYAWAN
     @GetMapping("/IMP/available-years")
-    public ResponseEntity<List<Integer>> getAvailableYears(@RequestParam String idlNpk) {
-        List<Integer> years = mIMPService.getAvailableYearsByNpk(idlNpk); // hasilnya harus List<Integer>
+    public ResponseEntity<List<Integer>> getAvailableYears(@RequestParam String impNpk) {
+        List<Integer> years = mIMPService.getAvailableYearsByNpk(impNpk); // hasilnya harus List<Integer>
         return ResponseEntity.ok(years);
     }
 

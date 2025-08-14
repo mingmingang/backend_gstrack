@@ -117,7 +117,7 @@ public class IMPService {
     }
 
     //KARYAWAN
-    public List<IMP> getIMPbyImpNpkAndImpCreatedDate(String idlNpk, Integer year) { return mIMPRepository.findByNpkAndYear(idlNpk, year); }
+    public List<IMP> getIMPbyImpNpkAndImpCreatedDate(String impNpk, Integer year) { return mIMPRepository.findByNpkAndYear(impNpk, year); }
 
     public List<Integer> getAvailableYearsByNpk(String npk) {
         return mIMPRepository.findAvailableYearsByNpk(npk);

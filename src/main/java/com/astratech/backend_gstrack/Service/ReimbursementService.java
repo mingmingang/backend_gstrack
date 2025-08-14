@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,9 +30,44 @@ public class ReimbursementService {
 
     @Transactional(readOnly = true)
     public List<ReimbursementDto> getReimbursements(String npk, int year) {
-        List<Reimbursement> reimbursementList = reimbursementRepository.findReimbursementsByNpkAndYear(npk, year);
-        return reimbursementList.stream()
-                .map(this::convertToDto) // Pastikan DTO tidak memuat byte[]
+        return reimbursementRepository.findReimbursementsByNpkAndYear(npk, year)
+                .stream()
+                .map(r -> {
+                    ReimbursementDto dto = new ReimbursementDto();
+                    dto.setRbmId(r.getRbmId());
+                    dto.setKryNpk(r.getKryNpk());
+                    dto.setOrgId(r.getOrgId());
+                    dto.setRbmTipe(r.getRbmTipe());
+                    dto.setRbmTanggalMulai(r.getRbmTanggalMulai());
+                    dto.setRbmTanggalSelesai(r.getRbmTanggalSelesai());
+                    dto.setRbmCost(r.getRbmCost());
+                    dto.setDgsId(r.getDgsId());
+                    dto.setRbmDiagnosaOther(r.getRbmDiagnosaOther());
+                    dto.setRsId(r.getRsId());
+                    dto.setRbmDokter(r.getRbmDokter());
+                    dto.setRbmFilePathKwitansi(r.getRbmFilePathKwitansi());
+                    dto.setRbmFilePathRincianObat(r.getRbmFilePathRincianObat());
+                    dto.setRbmFilePathHasilLab(r.getRbmFilePathHasilLab());
+                    dto.setRbmFilePathResumeMedis(r.getRbmFilePathResumeMedis());
+                    dto.setRbmStatusSubmit(r.getRbmStatusSubmit());
+                    dto.setRbmCreatedBy(r.getRbmCreatedBy());
+                    dto.setRbmCreatedDate(r.getRbmCreatedDate());
+                    dto.setRbmModifyBy(r.getRbmModifyBy());
+                    dto.setRbmModifyDate(r.getRbmModifyDate());
+                    dto.setRbmAlasanPembatalan(r.getRbmAlasanPembatalan());
+
+                    // Mapping nama karyawan / anggota
+                    dto.setKryNama(r.getKaryawan() != null ? r.getKaryawan().getNamaKaryawan() : null);
+                    dto.setOrgNama(r.getOrang() != null ? r.getOrang().getOrgNama() : null);
+                    dto.setOrgHubungan(r.getOrang() != null ? r.getOrang().getOrgHubungan() : null);
+
+                    // Mapping Rumah Sakit & Diagnosa
+                    dto.setRsNama(r.getRumahSakit() != null ? r.getRumahSakit().getRsNama() : null);
+                    dto.setRsTipe(r.getRumahSakit() != null ? r.getRumahSakit().getRsTipe() : null);
+                    dto.setDgsNama(r.getDiagnosa() != null ? r.getDiagnosa().getDgsNama() : null);
+
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -73,7 +109,11 @@ public class ReimbursementService {
         // Set semua data teks dan numerik lainnya
         newReimbursement.setKryNpk(kryNpk);
         newReimbursement.setDgsId(dgsId);
-        newReimbursement.setOrgId(orgId);
+
+        if (orgId != null && !orgId.equals(BigInteger.ZERO)) {
+            newReimbursement.setOrgId(orgId);
+        }
+
         newReimbursement.setRsId(rsId);
         newReimbursement.setRbmTipe(rbmTipe);
         newReimbursement.setRbmCost(rbmCost);
@@ -86,17 +126,30 @@ public class ReimbursementService {
         newReimbursement.setRbmStatusSubmit("Menunggu Persetujuan");
 
         // 2. Ubah MultipartFile menjadi byte[] dan set ke entity (Tidak ada perubahan di sini)
+//        if (fileKwitansi != null && !fileKwitansi.isEmpty()) {
+//            newReimbursement.setRbmFilePathKwitansi(fileKwitansi.getBytes());
+//        }
+//        if (fileRincianObat != null && !fileRincianObat.isEmpty()) {
+//            newReimbursement.setRbmFilePathRincianObat(fileRincianObat.getBytes());
+//        }
+//        if (fileHasilLab != null && !fileHasilLab.isEmpty()) {
+//            newReimbursement.setRbmFilePathHasilLab(fileHasilLab.getBytes());
+//        }
+//        if (fileResumeMedis != null && !fileResumeMedis.isEmpty()) {
+//            newReimbursement.setRbmFilePathResumeMedis(fileResumeMedis.getBytes());
+//        }
+
         if (fileKwitansi != null && !fileKwitansi.isEmpty()) {
-            newReimbursement.setRbmFilePathKwitansi(fileKwitansi.getBytes());
+            newReimbursement.setRbmFilePathKwitansi(Base64.getEncoder().encodeToString(fileKwitansi.getBytes()));
         }
         if (fileRincianObat != null && !fileRincianObat.isEmpty()) {
-            newReimbursement.setRbmFilePathRincianObat(fileRincianObat.getBytes());
+            newReimbursement.setRbmFilePathRincianObat(Base64.getEncoder().encodeToString(fileRincianObat.getBytes()));
         }
         if (fileHasilLab != null && !fileHasilLab.isEmpty()) {
-            newReimbursement.setRbmFilePathHasilLab(fileHasilLab.getBytes());
+            newReimbursement.setRbmFilePathHasilLab(Base64.getEncoder().encodeToString(fileHasilLab.getBytes()));
         }
         if (fileResumeMedis != null && !fileResumeMedis.isEmpty()) {
-            newReimbursement.setRbmFilePathResumeMedis(fileResumeMedis.getBytes());
+            newReimbursement.setRbmFilePathResumeMedis(Base64.getEncoder().encodeToString(fileResumeMedis.getBytes()));
         }
 
         // 3. Simpan entity ke database

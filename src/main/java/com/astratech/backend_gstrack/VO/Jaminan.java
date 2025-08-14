@@ -1,3 +1,4 @@
+//Jaminan - VO
 package com.astratech.backend_gstrack.VO;
 
 import com.astratech.backend_gstrack.VO.DataBantuan.Orang;
