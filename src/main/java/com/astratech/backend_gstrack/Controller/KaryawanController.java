@@ -22,7 +22,6 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/karyawan") // Menetapkan prefix /api/karyawan untuk semua endpoint di kelas ini
 public class KaryawanController {
 
     @Autowired
