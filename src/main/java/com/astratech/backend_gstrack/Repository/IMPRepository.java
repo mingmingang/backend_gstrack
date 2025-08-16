@@ -52,7 +52,7 @@ public interface IMPRepository extends JpaRepository<IMP, Serializable> {
     List<IMP> findAllByYear(@Param("year")Integer year);
 
     //KARYAWAN
-    @Query("SELECT DISTINCT FUNCTION('YEAR', ip.impCreatedDate) FROM IMP ip WHERE ip.impNpk = :npk ORDER BY 1 DESC")
+    @Query("SELECT DISTINCT FUNCTION('YEAR', i.idlCreatedDate) FROM IDL i WHERE i.idlNpk = :npk ORDER BY 1 DESC")
     List<Integer> findAvailableYearsByNpk(@Param("npk") String npk);
 
 

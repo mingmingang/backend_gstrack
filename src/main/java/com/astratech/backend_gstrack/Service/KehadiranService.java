@@ -125,8 +125,8 @@ public class KehadiranService {
         return new Result(200, "SUKSES", current);
     }
 
-    public Result currentLoggedKehadiran(Kehadiran kehadiran) {
-        List<Kehadiran> kehadiranList = kehadiranRepository.currentLoggedKehadiran(kehadiran.getIdKaryawan());
+    public Result currentLoggedKehadiran(String npk) {
+        List<Kehadiran> kehadiranList = kehadiranRepository.currentLoggedKehadiran(npk);
         return new Result(200, "SUKSES", kehadiranList);
     }
 

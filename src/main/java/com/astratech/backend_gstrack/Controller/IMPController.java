@@ -2,8 +2,6 @@ package com.astratech.backend_gstrack.Controller;
 
 import com.astratech.backend_gstrack.Service.IMPService;
 import com.astratech.backend_gstrack.VO.IMP;
-import com.astratech.backend_gstrack.VO.IMP;
-import com.astratech.backend_gstrack.VO.Karyawan;
 import com.astratech.backend_gstrack.VO.Result;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

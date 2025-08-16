@@ -10,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import java.util.Map;
 import java.time.LocalDate;
 
 @RestController
@@ -48,7 +48,8 @@ public class KehadiranController {
         return kehadiranService.currentSessionKehadiran(kehadiran);
     }
     @PostMapping("/currentlogged")
-    public Result getCurrentLogged(@RequestBody Kehadiran kehadiran) {
-        return kehadiranService.currentLoggedKehadiran(kehadiran);
+    public Result getCurrentLogged(@RequestBody Map<String, String> payload) {
+        String npk = payload.get("idKaryawan");
+        return kehadiranService.currentLoggedKehadiran(npk);
     }
 }
