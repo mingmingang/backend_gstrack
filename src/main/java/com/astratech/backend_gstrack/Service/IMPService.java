@@ -32,11 +32,6 @@ public class IMPService {
 
     public List<IMP> getIMPbyImpNpkAndImpStatus(String impNpk, String impStatus) { return mIMPRepository.findByNpkAndStatus(impNpk, impStatus); }
 
-//    @Transactional(readOnly = true)
-//    public List<IMP> findForAtasan(String npkAtasan) {
-//        return mIMPRepository.findForAtasan(npkAtasan);
-//    }
-
     public boolean saveIMP(IMP imp) {
         IMP result = mIMPRepository.save(imp);
         return result != null;
@@ -54,8 +49,8 @@ public class IMPService {
         if (StringUtils.hasLength(imp.getImpNpk())) {
             existingIMP.setImpNpk(imp.getImpNpk());
         }
-        if (StringUtils.hasLength(imp.getImpKegiatan())) {
-            existingIMP.setImpKegiatan(imp.getImpKegiatan());
+        if (StringUtils.hasLength(imp.getImpJenisKegiatan())) {
+            existingIMP.setImpJenisKegiatan(imp.getImpJenisKegiatan());
         }
         if (StringUtils.hasLength(String.valueOf(imp.getImpTanggalBerangkat()))) {
             existingIMP.setImpTanggalBerangkat(imp.getImpTanggalBerangkat());
@@ -92,6 +87,18 @@ public class IMPService {
         }
         if (StringUtils.hasLength(String.valueOf(imp.getImpModifDate()))) {
             existingIMP.setImpModifDate(imp.getImpModifDate());
+        }
+        if (StringUtils.hasLength(imp.getImpWaktuIzin())) {
+            existingIMP.setImpWaktuIzin(imp.getImpWaktuIzin());
+        }
+        if (StringUtils.hasLength(String.valueOf(imp.getImpBerangkatAktual()))) {
+            existingIMP.setImpBerangkatAktual(imp.getImpBerangkatAktual());
+        }
+        if (StringUtils.hasLength(String.valueOf(imp.getImpKembaliAktual()))) {
+            existingIMP.setImpKembaliAktual(imp.getImpKembaliAktual());
+        }
+        if (StringUtils.hasLength(imp.getImpAlasanPenolakan())) {
+            existingIMP.setImpAlasanPenolakan(imp.getImpAlasanPenolakan());
         }
 
         mIMPRepository.save(existingIMP);

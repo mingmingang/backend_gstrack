@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class IMPController {
@@ -35,7 +37,8 @@ public class IMPController {
         IMP imp = new IMP();
         imp.setImpNoRequest(param.getImpNoRequest());
         imp.setImpNpk(param.getImpNpk());
-        imp.setImpKegiatan(param.getImpKegiatan());
+        imp.setImpJenisKegiatan(param.getImpJenisKegiatan());
+        imp.setImpWaktuIzin(param.getImpWaktuIzin());
         imp.setImpTanggalBerangkat(param.getImpTanggalBerangkat());
         imp.setImpWaktuBerangkat(param.getImpWaktuBerangkat());
         imp.setImpTanggalKembali(param.getImpTanggalKembali());
@@ -61,7 +64,8 @@ public class IMPController {
         imp.setImpId(userParam.getImpId());
         imp.setImpNoRequest(userParam.getImpNoRequest());
         imp.setImpNpk(userParam.getImpNpk());
-        imp.setImpKegiatan(userParam.getImpKegiatan());
+        imp.setImpJenisKegiatan(userParam.getImpJenisKegiatan());
+        imp.setImpWaktuIzin(userParam.getImpWaktuIzin());
         imp.setImpTanggalBerangkat(userParam.getImpTanggalBerangkat());
         imp.setImpWaktuBerangkat(userParam.getImpWaktuBerangkat());
         imp.setImpTanggalKembali(userParam.getImpTanggalKembali());
@@ -74,12 +78,45 @@ public class IMPController {
         imp.setImpCreatedDate(userParam.getImpCreatedDate());
         imp.setImpModifBy(userParam.getImpModifBy());
         imp.setImpModifDate(userParam.getImpModifDate());
+        imp.setImpBerangkatAktual(userParam.getImpBerangkatAktual());
+        imp.setImpKembaliAktual(userParam.getImpKembaliAktual());
+        imp.setImpAlasanPenolakan(userParam.getImpAlasanPenolakan());
         boolean isSuccess = mIMPService.updateIMP(imp);
         if (isSuccess) {
             return new Result(200, "Success");
         } else {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return new Result(500, "Internal Server Error");
+        }
+    }
+
+    @PutMapping("/updateIMPWaktuAktualSimple")
+    public Object updateIMPWaktuAktualSimple(HttpServletResponse response, @RequestBody Map<String, Object> param) {
+        try {
+            String impNoRequest = (String) param.get("impNoRequest");
+            String impBerangkatAktual = (String) param.get("impBerangkatAktual");
+            String impKembaliAktual = (String) param.get("impKembaliAktual");
+
+            // Cari IMP berdasarkan impNoRequest
+            IMP existingIMP = mIMPService.getIMPbyImpNoRequest(impNoRequest);
+            if (existingIMP == null) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return new Result(404, "IMP not found");
+            }
+
+            // Update hanya field yang diperlukan
+            if (impBerangkatAktual != null) {
+                existingIMP.setImpBerangkatAktual(LocalDateTime.parse(impBerangkatAktual));
+            }
+            if (impKembaliAktual != null) {
+                existingIMP.setImpKembaliAktual(LocalDateTime.parse(impKembaliAktual));
+            }
+
+            mIMPService.saveIMP(existingIMP);
+            return new Result(200, "Success");
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return new Result(500, "Error: " + e.getMessage());
         }
     }
 

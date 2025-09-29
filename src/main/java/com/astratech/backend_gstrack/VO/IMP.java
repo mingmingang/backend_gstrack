@@ -28,8 +28,8 @@ public class IMP {
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private Karyawan karyawan;
 
-    @Column(name = "imp_kegiatan")
-    private String impKegiatan;
+    @Column(name = "imp_jenis_kegiatan")
+    private String impJenisKegiatan;
 
     @Column(name = "imp_tanggal_berangkat")
     private LocalDate impTanggalBerangkat;
@@ -68,14 +68,26 @@ public class IMP {
     @Column(name = "imp_modif_date")
     private LocalDateTime impModifDate;
 
+    @Column(name = "imp_waktu_izin")
+    private String impWaktuIzin;
+
+    @Column(name = "imp_berangkat_aktual")
+    private LocalDateTime impBerangkatAktual;
+
+    @Column(name = "imp_kembali_aktual")
+    private LocalDateTime impKembaliAktual;
+
+    @Column(name = "imp_alasan_penolakan")
+    private String impAlasanPenolakan;
+
     public IMP() {}
 
-    public IMP(int impId, String impNoRequest, String impNpk, Karyawan karyawan, String impKegiatan, LocalDate impTanggalBerangkat, LocalTime impWaktuBerangkat, LocalDate impTanggalKembali, LocalTime impWaktuKembali, String impLokasi, String impKeterangan, String impBerkasLampiran, String impStatus, String impCreatedBy, LocalDateTime impCreatedDate, String impModifBy, LocalDateTime impModifDate) {
+    public IMP(int impId, String impNoRequest, String impNpk, Karyawan karyawan, String impJenisKegiatan, LocalDate impTanggalBerangkat, LocalTime impWaktuBerangkat, LocalDate impTanggalKembali, LocalTime impWaktuKembali, String impLokasi, String impKeterangan, String impBerkasLampiran, String impStatus, String impCreatedBy, LocalDateTime impCreatedDate, String impModifBy, LocalDateTime impModifDate, String impWaktuIzin, LocalDateTime impBerangkatAktual, LocalDateTime impKembaliAktual, String impAlasanPenolakan) {
         this.impId = impId;
         this.impNoRequest = impNoRequest;
         this.impNpk = impNpk;
         this.karyawan = karyawan;
-        this.impKegiatan = impKegiatan;
+        this.impJenisKegiatan = impJenisKegiatan;
         this.impTanggalBerangkat = impTanggalBerangkat;
         this.impWaktuBerangkat = impWaktuBerangkat;
         this.impTanggalKembali = impTanggalKembali;
@@ -88,6 +100,10 @@ public class IMP {
         this.impCreatedDate = impCreatedDate;
         this.impModifBy = impModifBy;
         this.impModifDate = impModifDate;
+        this.impWaktuIzin = impWaktuIzin;
+        this.impBerangkatAktual = impBerangkatAktual;
+        this.impKembaliAktual = impKembaliAktual;
+        this.impAlasanPenolakan = impAlasanPenolakan;
     }
 
     public int getImpId() {
@@ -127,12 +143,12 @@ public class IMP {
         return karyawan!=null ? karyawan.getNamaKaryawan() : null;
     }
 
-    public String getImpKegiatan() {
-        return impKegiatan;
+    public String getImpJenisKegiatan() {
+        return impJenisKegiatan;
     }
 
-    public void setImpKegiatan(String impKegiatan) {
-        this.impKegiatan = impKegiatan;
+    public void setImpJenisKegiatan(String impJenisKegiatan) {
+        this.impJenisKegiatan = impJenisKegiatan;
     }
 
     public LocalDate getImpTanggalBerangkat() {
@@ -229,5 +245,37 @@ public class IMP {
 
     public void setImpModifDate(LocalDateTime impModifDate) {
         this.impModifDate = impModifDate;
+    }
+
+    public String getImpWaktuIzin() {
+        return impWaktuIzin;
+    }
+
+    public void setImpWaktuIzin(String impWaktuIzin) {
+        this.impWaktuIzin = impWaktuIzin;
+    }
+
+    public LocalDateTime getImpBerangkatAktual() {
+        return impBerangkatAktual;
+    }
+
+    public void setImpBerangkatAktual(LocalDateTime impBerangkatAktual) {
+        this.impBerangkatAktual = impBerangkatAktual;
+    }
+
+    public LocalDateTime getImpKembaliAktual() {
+        return impKembaliAktual;
+    }
+
+    public void setImpKembaliAktual(LocalDateTime impKembaliAktual) {
+        this.impKembaliAktual = impKembaliAktual;
+    }
+
+    public String getImpAlasanPenolakan() {
+        return impAlasanPenolakan;
+    }
+
+    public void setImpAlasanPenolakan(String impAlasanPenolakan) {
+        this.impAlasanPenolakan = impAlasanPenolakan;
     }
 }
